@@ -1,9 +1,9 @@
-<html lang="en">
+<html lang="vi">
 <head>
     {{header_init}}
-    <title>How to Play Chinese chess (xiangqi) - elephantchess.io</title>
+    <title>Cách chơi Cờ tướng (xiangqi) - elephantchess.io</title>
     <meta name="description"
-          content="How to play Chinese chess (xiangqi). Interactive board for each piece.">
+          content="Cách chơi Cờ tướng (xiangqi). Bàn cờ tương tác cho từng quân cờ.">
     <script defer src="/js/modules/engine.js"></script>
     <script defer src="/js/widgets/board-gui.js"></script>
     <link rel="stylesheet" href="/css/how-to-play-xiangqi.css"/>
@@ -12,16 +12,16 @@
 <body>
 {{body_init}}
 <div class="main-container-text-extended-smaller">
-    <h1>How to Play</h1>
+    <h1>Cách chơi</h1>
     <hr/>
     <p>
-        This page lists all xiangqi pieces with interactive boards. You can click on the pieces or start to drag them to
-        visualize and play moves on each test position.
+        Trang này liệt kê tất cả các quân cờ tướng kèm bàn cờ tương tác. Bạn có thể nhấp vào quân cờ hoặc bắt đầu kéo
+        để xem và thử các nước đi trên từng thế cờ mẫu.
     </p>
     <p>
-        This page renders the boards with "romanized" (or "westernized") piece style by default (assuming people who
-        want to learn the game might not be familiar with the Chinese characters yet), but you can change the piece
-        style in the setting manager at any time:
+        Trang này mặc định hiển thị bàn cờ với kiểu quân "la tinh" (hay "phương Tây hóa") (giả định rằng những người
+        muốn học trò chơi có thể chưa quen với chữ Hán), nhưng bạn có thể đổi kiểu quân cờ trong trình quản lý cài đặt
+        bất cứ lúc nào:
     </p>
     <div class="center-content-div">
         <div id="settings-info-box-container" class="center-content-div">
@@ -29,21 +29,21 @@
         </div>
     </div>
 
-    <h1>Moves</h1>
+    <h1>Nước đi</h1>
     <hr/>
     <div class="piece-rules">
         <div class="piece-row">
             <div class="explanation">
-                <h2 id="general-moves">General (帅 / 将)</h2>
+                <h2 id="general-moves">Tướng (帅 / 将)</h2>
                 <p>
-                    The General moves one step orthogonally and must stay in the palace.
+                    Tướng đi một bước theo hàng dọc hoặc hàng ngang và phải ở trong cung.
                 </p>
                 <p>
-                    It is represented by the letter K in FEN.
+                    Được ký hiệu bằng chữ K trong FEN.
                 </p>
                 <p>
-                    <span id="reset-general-board-button" class="action-link">reset test board</span> /
-                    <a href="/board?medium=xiangqi_about">test board</a>
+                    <span id="reset-general-board-button" class="action-link">đặt lại bàn cờ thử</span> /
+                    <a href="/board?medium=xiangqi_about">bàn cờ thử</a>
                 </p>
             </div>
             <div class="board">
@@ -52,16 +52,16 @@
         </div>
         <div class="piece-row">
             <div class="explanation">
-                <h2 id="advisor-moves">Advisor (仕 / 士)</h2>
+                <h2 id="advisor-moves">Sĩ (仕 / 士)</h2>
                 <p>
-                    The Advisor moves one step diagonally and also stays in the palace.
+                    Sĩ đi một bước theo đường chéo và cũng phải ở trong cung.
                 </p>
                 <p>
-                    It is represented by the letter A in FEN.
+                    Được ký hiệu bằng chữ A trong FEN.
                 </p>
                 <p>
-                    <span id="reset-advisor-board-button" class="action-link">reset test board</span> /
-                    <a href="/board?medium=xiangqi_about">test board</a>
+                    <span id="reset-advisor-board-button" class="action-link">đặt lại bàn cờ thử</span> /
+                    <a href="/board?medium=xiangqi_about">bàn cờ thử</a>
                 </p>
             </div>
             <div class="board">
@@ -70,16 +70,16 @@
         </div>
         <div class="piece-row">
             <div class="explanation">
-                <h2 id="elephant-moves">Elephant (相 / 象)</h2>
+                <h2 id="elephant-moves">Tượng (相 / 象)</h2>
                 <p>
-                    The Elephant moves two points diagonally, cannot jump, and cannot cross the river.
+                    Tượng đi hai điểm theo đường chéo, không được nhảy qua quân khác và không được vượt sông.
                 </p>
                 <p>
-                    It is represented by the letter B in FEN.
+                    Được ký hiệu bằng chữ B trong FEN.
                 </p>
                 <p>
-                    <span id="reset-elephant-board-button" class="action-link">reset test board</span> /
-                    <a href="/board?medium=xiangqi_about">test board</a>
+                    <span id="reset-elephant-board-button" class="action-link">đặt lại bàn cờ thử</span> /
+                    <a href="/board?medium=xiangqi_about">bàn cờ thử</a>
                 </p>
             </div>
             <div class="board">
@@ -88,17 +88,17 @@
         </div>
         <div class="piece-row">
             <div class="explanation">
-                <h2 id="horse-moves">Horse (傌 / 馬)</h2>
+                <h2 id="horse-moves">Mã (傌 / 馬)</h2>
                 <p>
-                    The Horse moves one point orthogonally then one point diagonally outward. It can be blocked if the
-                    orthogonal square is already occupied.
+                    Mã đi một điểm theo hàng dọc/ngang rồi một điểm chéo ra ngoài. Mã sẽ bị cản nếu ô
+                    dọc/ngang kề bên đã bị chiếm.
                 </p>
                 <p>
-                    It is represented by the letter N in FEN.
+                    Được ký hiệu bằng chữ N trong FEN.
                 </p>
                 <p>
-                    <span id="reset-horse-board-button" class="action-link">reset test board</span> /
-                    <a href="/board?medium=xiangqi_about">test board</a>
+                    <span id="reset-horse-board-button" class="action-link">đặt lại bàn cờ thử</span> /
+                    <a href="/board?medium=xiangqi_about">bàn cờ thử</a>
                 </p>
             </div>
             <div class="board">
@@ -107,16 +107,16 @@
         </div>
         <div class="piece-row">
             <div class="explanation">
-                <h2 id="chariot-moves">Chariot (俥 / 車)</h2>
+                <h2 id="chariot-moves">Xe (俥 / 車)</h2>
                 <p>
-                    The Chariot moves any distance orthogonally (like a rook).
+                    Xe đi bất kỳ khoảng cách nào theo hàng dọc hoặc hàng ngang (như xe trong cờ vua).
                 </p>
                 <p>
-                    It is represented by the letter R in FEN.
+                    Được ký hiệu bằng chữ R trong FEN.
                 </p>
                 <p>
-                    <span id="reset-chariot-board-button" class="action-link">reset test board</span> /
-                    <a href="/board?medium=xiangqi_about">test board</a>
+                    <span id="reset-chariot-board-button" class="action-link">đặt lại bàn cờ thử</span> /
+                    <a href="/board?medium=xiangqi_about">bàn cờ thử</a>
                 </p>
             </div>
             <div class="board">
@@ -125,16 +125,16 @@
         </div>
         <div class="piece-row">
             <div class="explanation">
-                <h2 id="cannon-moves">Cannon (炮 / 砲)</h2>
+                <h2 id="cannon-moves">Pháo (炮 / 砲)</h2>
                 <p>
-                    The Cannon moves like a Chariot, but captures only by jumping over exactly one piece.
+                    Pháo đi như Xe, nhưng chỉ ăn quân bằng cách nhảy qua đúng một quân.
                 </p>
                 <p>
-                    It is represented by the letter C in FEN.
+                    Được ký hiệu bằng chữ C trong FEN.
                 </p>
                 <p>
-                    <span id="reset-cannon-board-button" class="action-link">reset test board</span> /
-                    <a href="/board?medium=xiangqi_about">test board</a>
+                    <span id="reset-cannon-board-button" class="action-link">đặt lại bàn cờ thử</span> /
+                    <a href="/board?medium=xiangqi_about">bàn cờ thử</a>
                 </p>
             </div>
             <div class="board">
@@ -143,17 +143,17 @@
         </div>
         <div class="piece-row">
             <div class="explanation">
-                <h2 id="soldier-moves">Soldier (兵 / 卒)</h2>
+                <h2 id="soldier-moves">Tốt (兵 / 卒)</h2>
                 <p>
-                    Before crossing the river, a Soldier moves forward one point. After crossing, it can also move one
-                    point horizontally.
+                    Trước khi vượt sông, Tốt chỉ đi tiến một điểm. Sau khi vượt sông, Tốt còn có thể đi
+                    một điểm theo chiều ngang.
                 </p>
                 <p>
-                    It is represented by the letter P in FEN.
+                    Được ký hiệu bằng chữ P trong FEN.
                 </p>
                 <p>
-                    <span id="reset-soldier-board-button" class="action-link">reset test board</span> /
-                    <a href="/board?medium=xiangqi_about">test board</a>
+                    <span id="reset-soldier-board-button" class="action-link">đặt lại bàn cờ thử</span> /
+                    <a href="/board?medium=xiangqi_about">bàn cờ thử</a>
                 </p>
             </div>
             <div class="board">
@@ -162,22 +162,22 @@
         </div>
     </div>
 
-    <h1>Variants</h1>
+    <h1>Biến thể</h1>
     <hr/>
     <div class="piece-rules">
         <div class="piece-row">
             <div class="explanation">
-                <h2 id="manchu-chariot-moves">Manchu Super Chariot (M)</h2>
+                <h2 id="manchu-chariot-moves">Siêu Xe Mãn Châu (M)</h2>
                 <p>
-                    In the Manchu variant (also called Yitong), Red has a single super chariot that combines the powers
-                    of chariot, horse, and cannon.
+                    Trong biến thể Mãn Châu (còn gọi là Nhất Thống), bên Đỏ có một siêu xe duy nhất kết hợp sức mạnh
+                    của xe, mã và pháo.
                 </p>
                 <p>
-                    It is represented by the letter M in FEN.
+                    Được ký hiệu bằng chữ M trong FEN.
                 </p>
                 <p>
-                    <span id="reset-manchu-chariot-board-button" class="action-link">reset test board</span> /
-                    <a href="/board?variant=manchu&medium=xiangqi_about">Manchu test board</a>
+                    <span id="reset-manchu-chariot-board-button" class="action-link">đặt lại bàn cờ thử</span> /
+                    <a href="/board?variant=manchu&medium=xiangqi_about">bàn cờ thử Mãn Châu</a>
                 </p>
             </div>
             <div class="board">
@@ -186,18 +186,18 @@
         </div>
     </div>
 
-    <h1>Setup</h1>
+    <h1>Thế trận ban đầu</h1>
     <hr/>
     <div class="piece-rules">
         <div class="piece-row">
             <div class="explanation">
-                <h2 id="complete-setup-board">Initial Position</h2>
+                <h2 id="complete-setup-board">Vị trí ban đầu</h2>
                 <p>
-                    Red plays first.
+                    Bên Đỏ đi trước.
                 </p>
                 <p>
-                    <span id="reset-complete-setup-board-button" class="action-link">reset setup board</span> /
-                    <a href="/board?medium=xiangqi_about">test board</a>
+                    <span id="reset-complete-setup-board-button" class="action-link">đặt lại bàn cờ thế trận</span> /
+                    <a href="/board?medium=xiangqi_about">bàn cờ thử</a>
                 </p>
             </div>
             <div class="board">
@@ -206,17 +206,17 @@
         </div>
     </div>
 
-    <h1>See also</h1>
+    <h1>Xem thêm</h1>
     <hr/>
     <ul>
         <li>
             <a href="/board?medium=how-to-play">
-                Test Board
+                Bàn cờ thử
             </a>
         </li>
         <li>
             <a href="/board?variant=manchu&medium=how-to-play">
-                Test Board (Manchu variant)
+                Bàn cờ thử (biến thể Mãn Châu)
             </a>
         </li>
         <li>

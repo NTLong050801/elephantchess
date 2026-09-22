@@ -1,9 +1,9 @@
-<html lang="en">
+<html lang="vi">
 <head>
     {{header_init}}
-    <title>Browse PvP games</title>
+    <title>Duyệt ván đấu Người vs Người</title>
     <meta name="description"
-          content="Browse the latest Player-vs-Player Chinese Chess (Xiangqi) games played on elephantchess.io.">
+          content="Duyệt các ván Cờ Tướng (Xiangqi) Người đấu Người mới nhất được chơi trên elephantchess.io.">
     <meta property="og:url" content="https://elephantchess.io/browse/player-vs-player">
     <link rel="canonical" href="https://elephantchess.io/browse/player-vs-player">
     <link rel="stylesheet" href="/css/browse-games.css"/>
@@ -16,19 +16,19 @@
 <body>
 {{body_init}}
 <div class="main-container-text-extended">
-    <h1>Latest Player-vs-Player Games</h1>
+    <h1>Các Ván Đấu Người vs Người Mới Nhất</h1>
     <hr class="only-desktop"/>
     <div id="pvp-games-container">
         {{game_thumb}}[[iterations:6; {gameType: 'pvp', parentClass: 'pvp-game-thumb'}]]
     </div>
     <div id="is-loading-message" style="display: none;">
-        Loading more games...
+        Đang tải thêm ván đấu...
     </div>
     <div id="end-of-pagination-message" style="display: none;">
-        No more games to show
+        Không còn ván đấu nào để hiển thị
     </div>
     <div id="no-games-message" class="empty-list-message" style="display: none;">
-        No games found. Check back later!
+        Không tìm thấy ván đấu nào. Vui lòng quay lại sau!
     </div>
 </div>
 </body>

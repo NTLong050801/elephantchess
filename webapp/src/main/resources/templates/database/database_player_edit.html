@@ -1,7 +1,7 @@
-<html lang="en">
+<html lang="vi">
 <head>
     {{header_init}}
-    <title>Edit Database Player</title>
+    <title>Chỉnh Sửa Kỳ Thủ Trong Cơ Sở Dữ Liệu</title>
     {{meta_no_index}}
     <link rel="stylesheet" href="/css/database/database-player-edit.css">
     <script defer src="/js/database/database-player-profile-dto.js"></script>
@@ -12,90 +12,90 @@
 {{body_init}}
 <div class="main-container-text-extended">
     <p>
-        <a id="view-player-profile-link" href="#">view current player page version</a>
+        <a id="view-player-profile-link" href="#">xem phiên bản hiện tại của trang kỳ thủ</a>
     </p>
-    <h1>Edit History</h1>
+    <h1>Lịch Sử Chỉnh Sửa</h1>
     <hr/>
     <div id="version-history-container"></div>
-    <h1>Edit Database Player</h1>
+    <h1>Chỉnh Sửa Kỳ Thủ Trong Cơ Sở Dữ Liệu</h1>
     <hr/>
     <p>
-        If you need to discuss with other editors, the best place to do so is the <b><a
+        Nếu bạn cần thảo luận với các biên tập viên khác, nơi tốt nhất là kênh <b><a
             href="https://discord.com/channels/1084084469813747712/1457395719500726297" target="_blank">#editors</a></b>
-        channel on the <b><a href="https://discord.gg/WEGDqnWXNg" target="_blank">Discord</a></b>.
+        trên <b><a href="https://discord.gg/WEGDqnWXNg" target="_blank">Discord</a></b>.
     </p>
     <div id="loading-message" style="display: block;">
-        <p>Loading player data...</p>
+        <p>Đang tải dữ liệu kỳ thủ...</p>
     </div>
     <div id="player-edit-form" style="display: none;">
         <form id="edit-form">
             <!-- canonical name section -->
-            <h4>Canonical Name</h4>
+            <h4>Tên Chuẩn</h4>
             <ul>
                 <li>
-                    <i>Canonical Name</i> means a "clean" and standardized reference name that can be re-used across the
-                    Database. There are used for URL permalink, so avoid changing it too often. For that reason, we'll
-                    also avoid accentuated transliterations (e.g. "Fù Guāngmíng").
+                    <i>Tên Chuẩn</i> là tên tham chiếu "sạch" và được chuẩn hóa có thể tái sử dụng trong toàn bộ
+                    Cơ Sở Dữ Liệu. Tên này được dùng cho liên kết cố định (URL permalink), vì vậy hãy tránh thay đổi quá thường xuyên. Vì lý do đó, chúng ta
+                    cũng tránh dùng cách phiên âm có dấu (ví dụ "Fù Guāngmíng").
                 </li>
                 <li>
-                    In Chinese names, the surname (i.e. family name) comes first, followed by the given name. Standard
-                    Hanyu Pinyin rules dictate that the given name should be written as a single word with only the
-                    first letter capitalized. <b>For example: "Wang Tianyi"</b> instead of "Wang TianYi".
+                    Trong tên tiếng Trung, họ (tên gia đình) đứng trước, tiếp theo là tên. Quy tắc
+                    Bính âm Hán ngữ chuẩn quy định tên phải được viết thành một từ duy nhất chỉ viết hoa
+                    chữ cái đầu tiên. <b>Ví dụ: "Wang Tianyi"</b> thay vì "Wang TianYi".
                 </li>
                 <li>
-                    For Western names, please follow the standard English naming conventions, with the given name first
-                    and the surname last. <b>For example: "John Smith"</b>.
+                    Đối với tên phương Tây, vui lòng tuân theo quy ước đặt tên tiếng Anh chuẩn, với tên trước
+                    và họ sau. <b>Ví dụ: "John Smith"</b>.
                 </li>
             </ul>
             <input type="text" id="canonical-name" name="canonicalName" required/>
 
             <!-- Chinese name section -->
-            <h4>Chinese Name</h4>
+            <h4>Tên Tiếng Trung</h4>
             <input type="text" id="chinese-name" name="chineseName"/>
 
             <!-- gender section -->
-            <h4>Gender</h4>
+            <h4>Giới Tính</h4>
             <select id="gender" name="gender">
-                <option value="">Not specified</option>
-                <option value="M">Male</option>
-                <option value="F">Female</option>
+                <option value="">Không xác định</option>
+                <option value="M">Nam</option>
+                <option value="F">Nữ</option>
             </select>
 
             <!-- profile text section -->
-            <h4>Profile Text</h4>
+            <h4>Văn Bản Hồ Sơ</h4>
             <ul>
                 <li>
-                    If you use AI to edit the profile, please check the text is still factually correct and consistent
-                    with the sources, and indicate it in the Edit Comment section.
+                    Nếu bạn dùng AI để chỉnh sửa hồ sơ, vui lòng kiểm tra văn bản vẫn chính xác về mặt thực tế và nhất quán
+                    với các nguồn, và ghi rõ trong phần Ghi Chú Chỉnh Sửa.
                 </li>
                 <li>
-                    Do not copy-paste copyrighted text from other websites. Write original text based on the sources you
-                    have, otherwise those edits will be disabled.
+                    Không sao chép-dán văn bản có bản quyền từ các trang web khác. Hãy viết văn bản gốc dựa trên các nguồn bạn
+                    có, nếu không những chỉnh sửa đó sẽ bị vô hiệu hóa.
                 </li>
                 <li>
-                    To reference another player, add a HTML anchor in this format: <code>&lt;a
+                    Để tham chiếu đến kỳ thủ khác, hãy thêm thẻ neo HTML theo định dạng: <code>&lt;a
                     href="/database/player/Wang_Tianyi"&gt;Wang Yuefei&lt;/a&gt;</code>
                 </li>
             </ul>
             <textarea id="profile-text" name="profileText" rows="20"
-                      placeholder="Enter player profile description..."></textarea>
+                      placeholder="Nhập mô tả hồ sơ kỳ thủ..."></textarea>
 
             <!-- sources section -->
-            <h4>Sources</h4>
+            <h4>Nguồn</h4>
             <ul>
                 <li>
-                    At least one source is required, if possible in English. Ideally multiple.
+                    Yêu cầu ít nhất một nguồn, nếu có thể bằng tiếng Anh. Tốt nhất là nhiều nguồn.
                 </li>
                 <li>
-                    If not in English, please specify language in brackets (e.g. (zh) for Chinese, (vi) for Vietnamese,
-                    etc.). Check the
+                    Nếu không phải tiếng Anh, vui lòng ghi rõ ngôn ngữ trong ngoặc (ví dụ (zh) cho tiếng Trung, (vi) cho tiếng Việt,
+                    v.v.). Kiểm tra
                     <a href="https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes" target="_blank">ISO</a>
-                    convention of language codes (use two letters codes). If necessary, I will later develop a drop-down
-                    list.
+                    quy ước mã ngôn ngữ (dùng mã hai chữ cái). Nếu cần, tôi sẽ phát triển danh sách
+                    thả xuống sau.
                 </li>
                 <li>
-                    Just because you mentioned the source doesn't mean you can reproduce the entire page. Please
-                    re-phrase and re-write.
+                    Chỉ vì bạn đã đề cập nguồn không có nghĩa là bạn có thể sao chép toàn bộ trang. Vui lòng
+                    diễn đạt lại và viết lại.
                 </li>
             </ul>
 
@@ -103,19 +103,19 @@
             </div>
             <div class="center-content-div">
                 <div>
-                    <input type="button" id="add-source-btn" class="app-buttons" value="add Source"/>
+                    <input type="button" id="add-source-btn" class="app-buttons" value="Thêm Nguồn"/>
                 </div>
             </div>
 
-            <h4>Edit Comment</h4>
+            <h4>Ghi Chú Chỉnh Sửa</h4>
             <textarea id="edit-comment" name="editComment" rows="3"
-                      placeholder="Describe the changes you made. Specify if you used AI."></textarea>
+                      placeholder="Mô tả những thay đổi bạn đã thực hiện. Ghi rõ nếu bạn đã dùng AI."></textarea>
 
             <div class="center-content-div" style="margin-top: 20px">
                 <div>
-                    <input type="button" id="save-changes-btn" class="app-buttons-bigger" value="Save Changes"/>
+                    <input type="button" id="save-changes-btn" class="app-buttons-bigger" value="Lưu Thay Đổi"/>
                     <input type="button" id="cancel-btn" class="app-buttons-bigger app-buttons-red"
-                           value="Cancel"/>
+                           value="Hủy"/>
                 </div>
             </div>
         </form>

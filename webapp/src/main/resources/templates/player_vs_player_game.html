@@ -1,4 +1,4 @@
-<html lang="en">
+<html lang="vi">
 <head>
     {{header_init}}
     <title>{{page_title}}</title>
@@ -29,13 +29,13 @@
                 <tbody>
                 <tr>
                     <td class="icon-cell">
-                        <img id="main-icon" src="/images/icons/swords.png" alt="game"/>
+                        <img id="main-icon" src="/images/icons/swords.png" alt="ván cờ"/>
                     </td>
                     <td class="description-cell">
                         <table id="game-description-sub-table" class="info-box-sub-table">
                             <tbody>
                             <tr id="inviter-row">
-                                <td class="labels">Inviter</td>
+                                <td class="labels">Người mời</td>
                                 <td class="values">
                                     <div id="inviter-player-info">
                                         <span id="inviter-online-status-indicator"
@@ -44,19 +44,19 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="labels">Red</td>
+                                <td class="labels">Đỏ</td>
                                 <td class="values">
                                     <div id="red-player-info">
                                         <span id="red-online-status-indicator"
                                               class="online-status-indicator online-status-indicator-smaller"></span>
                                     </div>
                                     <div id="red-player-info-placeholder">
-                                        not chosen yet
+                                        chưa chọn
                                     </div>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="labels">Black</td>
+                                <td class="labels">Đen</td>
                                 <td class="values">
                                     <div id="black-player-info">
                                         <span id="black-online-status-indicator"
@@ -64,42 +64,42 @@
                                         </span>
                                     </div>
                                     <div id="black-player-info-placeholder">
-                                        not chosen yet
+                                        chưa chọn
                                     </div>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="labels">Created</td>
+                                <td class="labels">Ngày tạo</td>
                                 <td class="values">
                                     <div id="created-label"></div>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="labels">Time</td>
+                                <td class="labels">Thời gian</td>
                                 <td class="values">
                                     <div id="time-control-base"></div>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="labels">Mode</td>
+                                <td class="labels">Chế độ</td>
                                 <td class="values">
                                     <div id="rating-mode"></div>
                                 </td>
                             </tr>
                             <tr id="variant-row" style="display: none">
-                                <td class="labels">Variant</td>
+                                <td class="labels">Biến thể</td>
                                 <td class="values">
                                     <div id="variant-label"></div>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="labels">Status</td>
+                                <td class="labels">Trạng thái</td>
                                 <td class="values">
                                     <div id="game-status"></div>
                                 </td>
                             </tr>
                             <tr id="outcome-row">
-                                <td class="labels">Outcome</td>
+                                <td class="labels">Kết quả</td>
                                 <td class="values">
                                     <div id="game-outcome"></div>
                                 </td>
@@ -116,26 +116,26 @@
                 <tbody>
                 <tr id="resign-button" class="disabled-button">
                     <td class="icon-cell">
-                        <img src="/images/icons/surrender.png" alt="resign"/>
+                        <img src="/images/icons/surrender.png" alt="đầu hàng"/>
                     </td>
                     <td class="description-cell">
-                        Resign
+                        Đầu hàng
                     </td>
                 </tr>
                 <tr id="propose-draw-button" class="disabled-button">
                     <td class="icon-cell">
-                        <img src="/images/icons/handshake2.png" alt="propose draw"/>
+                        <img src="/images/icons/handshake2.png" alt="đề nghị hòa"/>
                     </td>
                     <td class="description-cell">
-                        Propose draw
+                        Đề nghị hòa
                     </td>
                 </tr>
                 <tr id="cancel-button" class="disabled-button">
                     <td class="icon-cell">
-                        <img src="/images/icons/cancel.png" style="opacity: 70%" alt="cancel"/>
+                        <img src="/images/icons/cancel.png" style="opacity: 70%" alt="hủy"/>
                     </td>
                     <td class="description-cell">
-                        Cancel
+                        Hủy
                     </td>
                 </tr>
                 </tbody>
@@ -144,7 +144,7 @@
         {{chat_box}}
         {{analysis_summary_report}}
         <div id="analysis-button-container-left-side">
-            <input type="button" value="Analyze" id="analyze-button-left-side"
+            <input type="button" value="Phân tích" id="analyze-button-left-side"
                    class="app-buttons-bigger app-buttons-disabled"/>
         </div>
     </div>
@@ -155,42 +155,40 @@
             <div id="inviter-board-mask" class="message-board-mask">
                 <div class="message-content">
                     <p>
-                        Your game has been created but no one has joined yet. The game is visible in the Lobby.
+                        Ván cờ của bạn đã được tạo nhưng chưa có ai tham gia. Ván cờ hiển thị trong Sảnh chờ.
                     </p>
                     <p>
-                        You can also <span class="action-link share-link-mask-action">share this link</span> with a
-                        friend to play with them.
+                        Bạn cũng có thể <span class="action-link share-link-mask-action">chia sẻ liên kết này</span> với bạn bè để cùng chơi.
                     </p>
                 </div>
             </div>
             <div id="inviter-private-invite-board-mask" class="message-board-mask">
                 <div class="message-content">
                     <p>
-                        Your game has been created.</p>
+                        Ván cờ của bạn đã được tạo.</p>
                     <p>
-                        The game is not visible in the Lobby, therefore you have to <span
-                            class="action-link share-link-mask-action">share this link</span> with someone to play with
-                        them.
+                        Ván cờ không hiển thị trong Sảnh chờ, vì vậy bạn cần <span
+                            class="action-link share-link-mask-action">chia sẻ liên kết này</span> với người khác để cùng chơi.
                     </p>
                 </div>
             </div>
             <div id="potential-joiner-mask" class="message-board-mask">
                 <div class="message-content">
-                    No one has joined the game yet.
+                    Chưa có ai tham gia ván cờ.
                     <div class="center-content-div">
-                        <input type="button" id="join-game-mask-button" value="Join Game"
+                        <input type="button" id="join-game-mask-button" value="Tham gia ván cờ"
                                class="app-buttons-much-bigger" style="margin-bottom: 0"/>
                     </div>
                 </div>
             </div>
             <div id="default-board-mask" class="message-board-mask">
                 <div class="message-content">
-                    The game has been created but no one has joined yet.
+                    Ván cờ đã được tạo nhưng chưa có ai tham gia.
                 </div>
             </div>
             <div id="canceled-game-mask" class="message-board-mask">
                 <div class="message-content">
-                    The game was canceled before it could start.
+                    Ván cờ đã bị hủy trước khi bắt đầu.
                 </div>
             </div>
         </div>
@@ -208,7 +206,7 @@
             </div>
         </div>
         <div id="analysis-button-container-right-side">
-            <input type="button" value="Analyze" id="analyze-button-right-side"
+            <input type="button" value="Phân tích" id="analyze-button-right-side"
                    class="app-buttons-bigger app-buttons-disabled"/>
         </div>
     </div>

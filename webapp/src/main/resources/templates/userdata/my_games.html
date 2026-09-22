@@ -1,7 +1,7 @@
-<html lang="en">
+<html lang="vi">
 <head>
     {{header_init}}
-    <title>My Games</title>
+    <title>Ván Đấu Của Tôi</title>
     {{meta_no_index}}
     <link rel="stylesheet" href="/css/my-user-data-items.css"/>
     <link rel="stylesheet" href="/css/my-games.css"/>
@@ -13,14 +13,14 @@
 <body>
 {{body_init}}
 <div class="main-container-text">
-    <h1>My Games</h1>
+    <h1>Ván Đấu Của Tôi</h1>
     <hr class="only-desktop"/>
     <div class="standard-checkbox">
         <span>
             <input id="include-canceled-checkbox" type="checkbox"/>
         </span>
         <span class="label-span">
-            <label for="include-canceled-checkbox">Include canceled games</label>
+            <label for="include-canceled-checkbox">Bao gồm ván đấu đã hủy</label>
         </span>
     </div>
     <div class="standard-checkbox">
@@ -28,17 +28,17 @@
             <input id="include-below-move-3-checkbox" type="checkbox"/>
         </span>
         <span class="label-span">
-            <label for="include-below-move-3-checkbox">Include games with less than 3 moves</label>
+            <label for="include-below-move-3-checkbox">Bao gồm ván đấu dưới 3 nước đi</label>
         </span>
     </div>
     <div id="my-game-items">
     </div>
     <div id="is-loading-message">
-        Loading more games...
+        Đang tải thêm ván đấu...
     </div>
     <div id="no-game-played-message" class="empty-list-message-user-data">
-        You didn't play any game yet. You can join a game in the <a href="/">Lobby</a>
-        or <span class="action-link" onclick="showNewGameModal()">create one</span>
+        Bạn chưa chơi ván nào. Bạn có thể tham gia ván đấu trong <a href="/">Sảnh Chờ</a>
+        hoặc <span class="action-link" onclick="showNewGameModal()">tạo ván mới</span>
     </div>
     {{logged_as_guest_message}}
 </div>

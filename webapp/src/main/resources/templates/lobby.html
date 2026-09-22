@@ -1,7 +1,7 @@
-<html lang="en">
+<html lang="vi">
 <head>
     {{header_init}}
-    <title>Play Chinese Chess (Xiangqi) Online with Friends - elephantchess.io</title>
+    <title>Chơi Cờ Tướng Online cùng bạn bè - elephantchess.io</title>
     <meta property="og:url" content="https://elephantchess.io/">
     <link rel="canonical" href="https://elephantchess.io/">
     <link rel="stylesheet" href="/css/lobby.css">
@@ -16,17 +16,16 @@
 {{body_init}}
 <div class="flex-lobby-container">
     <div class="flex-lobby-element flex-games-to-join-list-container">
-        <h1>Lobby</h1>
+        <h1>Sảnh chờ</h1>
         <div id="games-to-join-list-container">
             <div id="games-to-join-list-table-container">
                 <div id="games-to-join-list"></div>
                 <div id="no-game-to-join-message" class="empty-list-message">
                     <p>
-                        There is no game to join at the moment. But you can
-                        <b><span id="create-game-span" class="action-link">create one</span></b>
-                        or maybe train <span id="play-bot-span" class="action-link">against a bot</span>.
-                        You could also <span id="puzzle-training-span" class="action-link">play some puzzles</span>
-                        instead.
+                        Hiện chưa có ván nào để tham gia. Bạn có thể
+                        <b><span id="create-game-span" class="action-link">tạo ván mới</span></b>
+                        hoặc luyện tập <span id="play-bot-span" class="action-link">với máy</span>.
+                        Hoặc thử <span id="puzzle-training-span" class="action-link">giải đố cờ thế</span> thay thế.
                     </p>
                 </div>
             </div>
@@ -39,7 +38,7 @@
                 <input id="create-new-game-button"
                        type="button"
                        class="app-buttons-much-bigger"
-                       value="create new game">
+                       value="tạo ván mới">
             </div>
         </div>
         <div id="logo-holder" class="center-content-div">
@@ -47,11 +46,11 @@
         </div>
     </div>
     <div class="flex-lobby-element">
-        <h1>Puzzle Training</h1>
+        <h1>Luyện cờ thế</h1>
         <div>
             <p>
-                Puzzles are a great way to improve. They can help you develop your tactical vision, pattern recognition,
-                and calculation skills.
+                Cờ thế là cách tuyệt vời để nâng cao trình độ. Giúp bạn rèn luyện nhãn quan chiến thuật, khả năng nhận diện mẫu
+                và tính toán.
             </p>
         </div>
         <div class="center-content-div">
@@ -61,48 +60,10 @@
             </div>
         </div>
     </div>
-    <div class="flex-lobby-element">
-        <h1>Special Thanks</h1>
-        {{latest_supporter_banner_content}}
-        <p><a href="/about/faq#why-support-us">Read more</a></p>
-        <div id="kofi-logo-holder" class="center-content-div logo-holder">
-            <div>
-                <a href="https://ko-fi.com/elephantchess" target="_blank">
-                    <img id="kofi-logo" src="/images/kofi-logo-new-small.png" alt="support us on Ko-fi" loading="lazy"/>
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="flex-lobby-element">
-        <h1>Contact Us</h1>
-        <div>
-            <p>
-                Don't hesitate to reach out on <a href="https://github.com/benckx/elephantchess.io/issues"
-                                                  target="_blank">GitHub</a> to report issues and ask questions or to
-                look up what are the <a href="https://github.com/users/benckx/projects/2/views/1" target="_blank">current
-                developments</a> being worked on.
-            </p>
-            <p>
-                You can also join our <a href="https://discord.gg/WEGDqnWXNg" target="_blank">Discord</a> for more
-                general free form discussion or use the <a href="/contact?medium=lobby">contact form</a>.
-            </p>
-            <p>
-                We're always eager to hear your ideas on how to improve the platform.
-            </p>
-        </div>
-        <div class="center-content-div logo-holder">
-            <a href="https://discord.gg/WEGDqnWXNg" target="_blank">
-                <img id="discord-logo"
-                     src="/images/discord-logo-normal-black.png"
-                     alt="join our Discord"
-                     loading="lazy"/>
-            </a>
-        </div>
-    </div>
 </div>
 <div class="flex-lobby-container">
     <div class="flex-lobby-element flex-lobby-element-inter-title">
-        <h1>Latest Games</h1>
+        <h1>Ván mới nhất</h1>
     </div>
 </div>
 <div class="flex-lobby-container">
@@ -110,12 +71,12 @@
 </div>
 <div class="flex-lobby-container">
     <div class="center-content-div browse-more-link-container">
-        <a href="/browse/player-vs-player?medium=lobby" class="browse-more-link">Browse Latest Games</a>
+        <a href="/browse/player-vs-player?medium=lobby" class="browse-more-link">Xem thêm ván mới</a>
     </div>
 </div>
 <div class="flex-lobby-container">
     <div class="flex-lobby-element flex-lobby-element-inter-title">
-        <h1>Latest Bot Games</h1>
+        <h1>Ván với máy mới nhất</h1>
     </div>
 </div>
 <div class="flex-lobby-container">
@@ -123,82 +84,33 @@
 </div>
 <div class="flex-lobby-container">
     <div class="center-content-div browse-more-link-container">
-        <a href="/browse/player-vs-bot?medium=lobby" class="browse-more-link">Browse Latest Games</a>
+        <a href="/browse/player-vs-bot?medium=lobby" class="browse-more-link">Xem thêm ván mới</a>
     </div>
 </div>
 <div class="flex-lobby-container">
     <div class="flex-lobby-element">
-        <h1>How to Play</h1>
+        <h1>Cách chơi</h1>
         <p>
-            Check our <b><a href="/how-to-play-xiangqi">"how to" guide page</a></b> with interactive boards to learn the
-            pieces and the moves. You can also check this YouTube tutorial or the
-            <a href="https://en.wikipedia.org/wiki/Xiangqi" target="_blank">Wikipedia page</a>.
+            Xem <b><a href="/how-to-play-xiangqi">trang hướng dẫn cách chơi</a></b> với bàn cờ tương tác để học về
+            quân cờ và nước đi. Bạn cũng có thể xem video hướng dẫn trên YouTube hoặc
+            <a href="https://en.wikipedia.org/wiki/Xiangqi" target="_blank">trang Wikipedia</a>.
         </p>
         <div id="youtube-embed-container" class="center-content-div"></div>
     </div>
     <div class="flex-lobby-element">
-        <h1><i>Revenge of Ashes</i></h1>
+        <h1>Mẹo</h1>
         <p>
-            <i>Revenge of Ashes</i> is a turn-based strategy demo about Ashes’ journey to reclaim his throne, with
-            tactical battles in a dark fantasy setting.
-        </p>
-        <div id="revenge-of-ashes-embed-container"
-             class="center-content-div"
-             data-render-embed="true"></div>
-        <div class="center-content-div" style="font-size: 13px; margin-top: 5px;">
-            unpaid cross promotion
-        </div>
-    </div>
-    <div class="flex-lobby-element">
-        <h1>Tip</h1>
-        <p>
-            If you're still struggling to play with the chinese characters, you can switch to the romanized
-            (i.e. westernized) piece style with the second button on the settings widget.
+            Nếu bạn vẫn gặp khó khăn với chữ Hán, bạn có thể chuyển sang kiểu quân La tinh
+            (phương Tây) bằng nút thứ hai trên tiện ích cài đặt.
         </p>
         <p>
-            The settings widget is always accessible on the right side of the screen.
+            Tiện ích cài đặt luôn có sẵn ở bên phải màn hình.
         </p>
         <div class="center-content-div">
             <div class="center-content-div" style="width: 90%">
                 {{settings_info_box}}
             </div>
         </div>
-    </div>
-    <!--    <div class="flex-lobby-element">-->
-    <!--        <h1>Tip</h1>-->
-    <!--        <p>-->
-    <!--            We noticed some users seem to be playing against themselves with 2 accounts.-->
-    <!--        </p>-->
-    <!--        <p>-->
-    <!--            If you want to play with a friend who is sitting next to you or if you just want to test positions,-->
-    <!--            you can use our <a href="/board?medium=lobby">Test Board</a> tool.-->
-    <!--        </p>-->
-    <!--        <p>-->
-    <!--            And if you think some features are missing, don't hesitate to reach out on <a-->
-    <!--                href="https://discord.gg/WEGDqnWXNg" target="_blank">Discord</a>.-->
-    <!--        </p>-->
-    <!--    </div>-->
-    <div class="flex-lobby-element">
-        <h1>Working on a New Variant</h1>
-        <p>
-            We are currently working on an implementation of <i>The Game of the Seven Kingdoms</i>
-            <nobr>(七國象棋),</nobr>
-            a 7 players Chinese chess variant that you will be able to play with 6 friends (or fewer).
-        </p>
-        <p>
-            <a href="/7k/about?medium=lobby">Read more</a>
-        </p>
-    </div>
-    <div class="flex-lobby-element monthly-supporters our-supporters">
-        <h1>Latest Supporters</h1>
-        <div id="monthly-supporters-list">Loading...</div>
-    </div>
-    <div class="flex-lobby-element one-time-supporters our-supporters">
-        <h1>Latest Tippers</h1>
-        <div id="one-time-supporters-list">Loading...</div>
-    </div>
-    <div id="upcoming-events" class="flex-lobby-element">
-        <h1>Upcoming Events</h1>
     </div>
 </div>
 {{footer}}

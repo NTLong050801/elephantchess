@@ -1,7 +1,7 @@
-<html lang="en">
+<html lang="vi">
 <head>
     {{header_init}}
-    <title>Puzzles</title>
+    <title>Cờ thế</title>
     {{meta_no_index}}
     <link rel="stylesheet" href="/css/puzzles.css"/>
     {{board_js}}
@@ -20,40 +20,40 @@
         <div id="mobile-navigation-panel" class="navigation-panel mobile-navigation-panel only-mobile"></div>
         <div class="info-box">
             <div id="vote-up-down-container">
-                <img id="vote-thumbs-up" src="/images/icons/thumbs-up.png" alt="vote up" loading="lazy"/>
-                <img id="vote-thumbs-down" src="/images/icons/thumbs-down.png" alt="vote down" loading="lazy"/>
+                <img id="vote-thumbs-up" src="/images/icons/thumbs-up.png" alt="thích" loading="lazy"/>
+                <img id="vote-thumbs-down" src="/images/icons/thumbs-down.png" alt="không thích" loading="lazy"/>
             </div>
             <table class="info-box-table">
                 <tbody>
                 <tr>
                     <td class="icon-cell">
-                        <img src="/images/icons/puzzle-piece.png" class="less-dark-icon" alt="puzzle training"/>
+                        <img src="/images/icons/puzzle-piece.png" class="less-dark-icon" alt="luyện cờ thế"/>
                     </td>
                     <td class="description-cell">
                         <table class="info-box-sub-table">
                             <tbody>
                             <tr>
-                                <td class="labels">Puzzle</td>
+                                <td class="labels">Cờ thế</td>
                                 <td class="values">
                                     <span id="puzzle-id" class="action-link"></span>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="labels">Attempts</td>
+                                <td class="labels">Lượt thử</td>
                                 <td class="values">
                                     <span id="number-of-attempts"></span>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="labels">Rating</td>
+                                <td class="labels">Điểm</td>
                                 <td class="values">
-                                    <span id="puzzle-rating" class="hidden-values">hidden</span>
+                                    <span id="puzzle-rating" class="hidden-values">ẩn</span>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="labels">Category</td>
+                                <td class="labels">Thể loại</td>
                                 <td class="values">
-                                    <span id="puzzle-categories" class="hidden-values">hidden</span>
+                                    <span id="puzzle-categories" class="hidden-values">ẩn</span>
                                 </td>
                             </tr>
                             </tbody>
@@ -68,11 +68,11 @@
                 <tbody>
                 <tr>
                     <td class="icon-cell">
-                        <img src="/images/icons/servers.png" id="game-type-icon" alt="game-type"/>
+                        <img src="/images/icons/servers.png" id="game-type-icon" alt="loại ván cờ"/>
                     </td>
                     <td class="description-cell">
                         <div class="game-info-container">
-                            <div id="game-info" class="hidden-values">hidden</div>
+                            <div id="game-info" class="hidden-values">ẩn</div>
                         </div>
                     </td>
                 </tr>
@@ -85,12 +85,12 @@
                     <tbody>
                     <tr>
                         <td class="icon-cell">
-                            <img src="/images/pieces/traditional/red_general_char.png" alt="general"/>
+                            <img src="/images/pieces/traditional/red_general_char.png" alt="tướng"/>
                         </td>
                         <td class="description-cell">
                             <div>
-                                You're playing <span class="red-color">Red</span>.
-                                <br/>Find the <b>shortest</b> path to mate.
+                                Bạn cầm quân <span class="red-color">Đỏ</span>.
+                                <br/>Hãy tìm đường <b>ngắn nhất</b> để chiếu hết.
                             </div>
                         </td>
                     </tr>
@@ -100,12 +100,12 @@
                     <tbody>
                     <tr>
                         <td class="icon-cell">
-                            <img src="/images/pieces/traditional/black_general_char.png" alt="general"/>
+                            <img src="/images/pieces/traditional/black_general_char.png" alt="tướng"/>
                         </td>
                         <td class="description-cell">
                             <div>
-                                You're playing <span class="black-color">Black</span>.
-                                <br/>Find the <b>shortest</b> path to mate.
+                                Bạn cầm quân <span class="black-color">Đen</span>.
+                                <br/>Hãy tìm đường <b>ngắn nhất</b> để chiếu hết.
                             </div>
                         </td>
                     </tr>
@@ -115,13 +115,13 @@
                     <tbody>
                     <tr>
                         <td class="icon-cell">
-                            <img src="/images/icons/wrong-icon.png" alt="puzzle failed"/>
+                            <img src="/images/icons/wrong-icon.png" alt="thất bại"/>
                         </td>
                         <td class="description-cell">
                             <div>
-                                No solution was found in the allocated number of plies
+                                Không tìm thấy lời giải trong số nước đi cho phép
                                 (<span id="allocated-plies">N</span>).
-                                <br/><span class="action-link next-puzzle-link">[Enter] Next Puzzle</span>
+                                <br/><span class="action-link next-puzzle-link">[Enter] Cờ thế tiếp theo</span>
                             </div>
                         </td>
                     </tr>
@@ -131,12 +131,12 @@
                     <tbody>
                     <tr>
                         <td class="icon-cell">
-                            <img src="/images/icons/wrong-icon.png" alt="puzzle failed"/>
+                            <img src="/images/icons/wrong-icon.png" alt="thất bại"/>
                         </td>
                         <td class="description-cell">
                             <div>
-                                You were mated by the puzzle.
-                                <br/><span class="action-link next-puzzle-link">[Enter] Next Puzzle</span>
+                                Bạn đã bị chiếu hết.
+                                <br/><span class="action-link next-puzzle-link">[Enter] Cờ thế tiếp theo</span>
                             </div>
                         </td>
                     </tr>
@@ -146,12 +146,12 @@
                     <tbody>
                     <tr>
                         <td class="icon-cell">
-                            <img src="/images/icons/trophy-icon-gold-smaller.png" alt="puzzle solved"/>
+                            <img src="/images/icons/trophy-icon-gold-smaller.png" alt="giải được cờ thế"/>
                         </td>
                         <td class="description-cell">
                             <div>
-                                Great! You solved the puzzle by <span id="victory-type">mate</span>!
-                                <br/><span class="action-link next-puzzle-link">[Enter] Next Puzzle</span>
+                                Tuyệt vời! Bạn đã giải được cờ thế bằng <span id="victory-type">chiếu hết</span>!
+                                <br/><span class="action-link next-puzzle-link">[Enter] Cờ thế tiếp theo</span>
                             </div>
                         </td>
                     </tr>
@@ -161,12 +161,12 @@
                     <tbody>
                     <tr>
                         <td class="icon-cell">
-                            <img src="/images/icons/open-book.png" class="less-dark-icons" alt="puzzle solved"/>
+                            <img src="/images/icons/open-book.png" class="less-dark-icons" alt="đã hiện lời giải"/>
                         </td>
                         <td class="description-cell">
                             <div>
-                                Solution revealed.
-                                <br/><span class="action-link next-puzzle-link">[Enter] Next Puzzle</span>
+                                Đã hiện lời giải.
+                                <br/><span class="action-link next-puzzle-link">[Enter] Cờ thế tiếp theo</span>
                             </div>
                         </td>
                     </tr>
@@ -181,18 +181,18 @@
                     <td class="icon-cell">
                         <img src="/images/icons/navigation-beginning.png"
                              style="width:58%; transform: rotate(180deg)" class="less-dark-icons"
-                             alt="skip"/>
+                             alt="bỏ qua"/>
                     </td>
                     <td class="description-cell">
-                        Skip puzzle
+                        Bỏ qua cờ thế
                     </td>
                 </tr>
                 <tr id="reveal-solution-button" class="enabled-button">
                     <td class="icon-cell">
-                        <img src="/images/icons/open-book.png" class="less-dark-icons" alt="skip"/>
+                        <img src="/images/icons/open-book.png" class="less-dark-icons" alt="hiện lời giải"/>
                     </td>
                     <td class="description-cell">
-                        Reveal solution
+                        Hiện lời giải
                     </td>
                 </tr>
                 </tbody>
@@ -203,10 +203,10 @@
                 <tbody>
                 <tr>
                     <td class="icon-cell">
-                        <img src="/images/icons/stats.png" class="less-dark-icons" alt="rating"/>
+                        <img src="/images/icons/stats.png" class="less-dark-icons" alt="điểm"/>
                     </td>
                     <td class="description-cell">
-                        Your rating
+                        Điểm của bạn
                         <br/>
                         <div id="user-rating-value-box" class="user-rating-value-box"></div>
                         <div id="user-rating-delta-value-box" class="user-rating-delta-value-box"></div>

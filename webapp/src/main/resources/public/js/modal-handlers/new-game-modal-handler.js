@@ -102,30 +102,30 @@ class NewGameHandler extends ModalHandler {
             });
         } else {
             this.#correspondenceTimeControls.forEach(tcId => {
-                addToolTip(document.getElementById(tcId), 'This option is not available for guest users.');
+                addToolTip(document.getElementById(tcId), 'Tùy chọn này không dành cho khách.');
             });
         }
 
         addToolTip(
             document.getElementById('is-rated-container'),
-            'If playing "Rated" (instead of "Casual"), your rating will be affected by the outcome of the game.'
+            'Nếu chọn "Xếp hạng" (thay vì "Giao lưu"), điểm xếp hạng của bạn sẽ bị ảnh hưởng bởi kết quả ván cờ.'
         );
 
         addToolTip(
             document.getElementById('allow-guests-container'),
-            'Let guest users (i.e. users without a registered account) join this game. ' +
-            'This option is not available for guest users.'
+            'Cho phép khách (người dùng chưa có tài khoản) tham gia ván cờ này. ' +
+            'Tùy chọn này không dành cho khách.'
         );
 
         addToolTip(
             document.getElementById('always-visible-in-lobby-container'),
-            'If checked, the game will be visible to other players in the lobby even when you are offline. ' +
-            'Not recommended for shorter games.'
+            'Nếu được chọn, ván cờ sẽ hiển thị cho người chơi khác trong sảnh chờ ngay cả khi bạn ngoại tuyến. ' +
+            'Không khuyến nghị cho các ván cờ ngắn.'
         );
 
         addToolTip(
             document.getElementById('is-private-container'),
-            'Private games are not listed in the lobby and can only be joined by players with the direct link.'
+            'Ván cờ riêng tư không được liệt kê trong sảnh chờ và chỉ những người có liên kết trực tiếp mới có thể tham gia.'
         );
 
         // "always visible in lobby" requires a valid email and the "someone joined my game" notification:

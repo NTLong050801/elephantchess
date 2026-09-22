@@ -139,13 +139,13 @@ class LobbyPage extends BasePage {
 
             switch (update.totalOnline) {
                 case 0:
-                    this.#onlineUsers.innerText = 'No user online';
+                    this.#onlineUsers.innerText = 'Không có người dùng trực tuyến';
                     break;
                 case 1:
-                    this.#onlineUsers.innerText = '1 user online';
+                    this.#onlineUsers.innerText = '1 người dùng trực tuyến';
                     break;
                 default:
-                    this.#onlineUsers.innerText = `${update.totalOnline} users online`;
+                    this.#onlineUsers.innerText = `${update.totalOnline} người dùng trực tuyến`;
             }
         }];
     }
@@ -236,12 +236,12 @@ class LobbyPage extends BasePage {
             colorCell.className = 'game-to-join-metadata-item color-cell';
             const colorSpan = buildColorSpan(entry.opponentColor);
             if (colorSpan.classList.contains('any-color')) {
-                colorSpan.innerText = 'Any color';
-                colorSpan.title = 'Colors will be assigned randomly at the start of the game';
+                colorSpan.innerText = 'Màu bất kỳ';
+                colorSpan.title = 'Màu quân sẽ được gán ngẫu nhiên khi bắt đầu ván cờ';
             } else if (entry.opponentColor === Color.RED) {
-                colorSpan.title = 'This player picked Red, you would play Black';
+                colorSpan.title = 'Người chơi này chọn Đỏ, bạn sẽ chơi Đen';
             } else if (entry.opponentColor === Color.BLACK) {
-                colorSpan.title = 'This player picked Black, you would play Red';
+                colorSpan.title = 'Người chơi này chọn Đen, bạn sẽ chơi Đỏ';
             }
             colorCell.append(colorSpan);
             metadataLine.append(colorCell);
@@ -259,10 +259,10 @@ class LobbyPage extends BasePage {
             const ratingModeSpan = document.createElement('span');
             ratingModeCell.append(ratingModeSpan);
             if (entry.isRated) {
-                ratingModeSpan.innerText = 'Rated';
+                ratingModeSpan.innerText = 'Xếp hạng';
                 ratingModeIcon.src = RATING_MODE_ICONS.rated;
             } else {
-                ratingModeSpan.innerText = 'Casual';
+                ratingModeSpan.innerText = 'Giao lưu';
                 ratingModeIcon.src = RATING_MODE_ICONS.casual;
             }
 
@@ -271,7 +271,7 @@ class LobbyPage extends BasePage {
             joinButtonCell.className = 'join-button-cell';
             rightPane.append(joinButtonCell);
 
-            const joinButton = makeAppButton(`join-game-button-${entry.gameId}`, 'join');
+            const joinButton = makeAppButton(`join-game-button-${entry.gameId}`, 'tham gia');
             joinButtonCell.append(joinButton);
             joinButton.classList.add('join-buttons');
             joinButton.addEventListener('click', () => this.#handleClickJoinButton(entry));
@@ -284,9 +284,9 @@ class LobbyPage extends BasePage {
      */
     #handleClickJoinButton(entry) {
         if (userIdOrNull() === entry.opponentUserId) {
-            UI.pushErrorNotification('You can not join your own game ;)');
+            UI.pushErrorNotification('Bạn không thể tham gia ván cờ của chính mình ;)');
         } else if (entry.isCorrespondenceGame && !isUserAuthenticated()) {
-            UI.pushErrorNotification('Correspondence games are not available for guests. Please sign up or log in.');
+            UI.pushErrorNotification('Ván cờ thư tín không dành cho khách. Vui lòng đăng ký hoặc đăng nhập.');
         } else {
             this.#joinGame(entry.gameId);
         }
@@ -327,7 +327,7 @@ class LobbyPage extends BasePage {
             const eventsDiv = document.getElementById('upcoming-events');
 
             if (events.length === 0) {
-                eventsDiv.innerText = 'No upcoming events';
+                eventsDiv.innerText = 'Không có sự kiện sắp tới';
             } else {
                 events.forEach(event => {
                     const eventDiv = document.createElement('div');
@@ -366,7 +366,7 @@ class LobbyPage extends BasePage {
         this.#client.listLatestRecurrentSupporters((response) => {
             const supportersDiv = document.getElementById('monthly-supporters-list');
             if (response.entries.length === 0) {
-                supportersDiv.innerText = 'No monthly supporters yet';
+                supportersDiv.innerText = 'Chưa có người ủng hộ hàng tháng';
             } else {
                 supportersDiv.innerHTML = '';
                 response.entries.forEach((entry, index) => {
@@ -386,7 +386,7 @@ class LobbyPage extends BasePage {
         this.#client.listLatestTippers((response) => {
             const tippersDiv = document.getElementById('one-time-supporters-list');
             if (response.entries.length === 0) {
-                tippersDiv.innerText = 'No one-time supporters yet';
+                tippersDiv.innerText = 'Chưa có người ủng hộ một lần';
             } else {
                 tippersDiv.innerHTML = '';
                 response.entries.forEach((entry, index) => {

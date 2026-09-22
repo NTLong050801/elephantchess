@@ -1,6 +1,6 @@
 <div id="play-bot-modal" class="modal-content" data-nosnippet>
     <button class="modal-close-button" aria-label="Close">×</button>
-    <h2>Play Bot</h2>
+    <h2>Chơi với máy</h2>
     <div class="new-game-main-container">
         <div class="container-with-margin">
             <table class="new-game-option-table">
@@ -38,13 +38,13 @@
                     <td class="button-cells">
                         <div id="play-as-red"
                              class="option-button-div bot-color-option-button-div option-button-div-selected red-color">
-                            Red
+                            Đỏ
                         </div>
                     </td>
                     <td class="button-cells">
                         <div id="play-as-black"
                              class="option-button-div bot-color-option-button-div black-color">
-                            Black
+                            Đen
                         </div>
                     </td>
                 </tr>
@@ -71,15 +71,15 @@
                 </tr>
             </table>
             <div id="play-bot-depth-box">
-                <h3 class="add-asterisk">Depth</h3>
+                <h3 class="add-asterisk">Độ sâu</h3>
                 <input id="play-bot-depth" type="range" min="1" max="14" value="6">
                 <div id="play-bot-depth-value-box">
-                    Depth <span id="play-bot-depth-value">6</span>/<span id="play-bot-depth-max-value">14</span>
+                    Độ sâu <span id="play-bot-depth-value">6</span>/<span id="play-bot-depth-max-value">14</span>
                 </div>
             </div>
             <div class="modal-form-label">
                 <h3 class="openings-heading">
-                    <span>Opening Mode</span>
+                    <span>Chế độ khai cuộc</span>
                     <a href="/about/faq#pvb-opening-mode" target="_blank">
                         <img src="/images/icons/question_faq.png" alt="about"/>
                     </a>
@@ -90,7 +90,7 @@
                                checked="checked">
                     </span>
                     <span class="label-span">
-                        <label for="opening-by-frequency">Most Played</label>
+                        <label for="opening-by-frequency">Hay gặp nhất</label>
                     </span>
                 </div>
                 <div class="standard-radio play-bot-opening-radio-option">
@@ -98,7 +98,7 @@
                         <input type="radio" id="opening-random" name="play-bot-opening" value="RANDOM">
                     </span>
                     <span class="label-span">
-                        <label for="opening-random">Randomized</label>
+                        <label for="opening-random">Ngẫu nhiên</label>
                     </span>
                 </div>
                 <div class="standard-radio play-bot-opening-radio-option">
@@ -106,19 +106,19 @@
                         <input type="radio" id="opening-engine-only" name="play-bot-opening" value="ENGINE_ONLY">
                     </span>
                     <span class="label-span">
-                        <label for="opening-engine-only">Engine Only</label>
+                        <label for="opening-engine-only">Chỉ dùng máy</label>
                     </span>
                 </div>
             </div>
             <div class="modal-form-label">
-                <h3>Starting Position</h3>
+                <h3>Thế cờ ban đầu</h3>
                 <div class="standard-radio">
                     <span>
                         <input type="radio" id="start-fen-standard" name="start-position-radio" value="Standard"
                                checked="checked">
                     </span>
                     <span class="label-span">
-                        <label for="start-fen-standard">Standard</label>
+                        <label for="start-fen-standard">Tiêu chuẩn</label>
                     </span>
                 </div>
                 <div class="standard-radio">
@@ -126,7 +126,7 @@
                         <input type="radio" id="start-fen-custom" name="start-position-radio" value="Custom">
                     </span>
                     <span class="label-span">
-                        <label for="start-fen-custom">Custom</label>
+                        <label for="start-fen-custom">Tùy chỉnh</label>
                     </span>
                 </div>
                 <input id="start-fen" type="text"
@@ -136,13 +136,13 @@
         </div>
     </div>
     <div class="modal-buttons-panel">
-        <input id="play-bot-button" type="button" class="app-buttons" value="play">
+        <input id="play-bot-button" type="button" class="app-buttons" value="chơi">
     </div>
     <div class="center-content-div">
         <div id="deeper-levels-message" class="only-guest-hidden-by-default">
-            <b>*</b> If you want to be able to play with depth greater than 6, you have to
-            <b><span class="action-link" onclick="showSignUpModal()">sign up</span></b>.
-            Don't worry, it's free and quick!
+            <b>*</b> Muốn chơi ở độ sâu lớn hơn 6, bạn cần
+            <b><span class="action-link" onclick="showSignUpModal()">đăng ký</span></b>.
+            Miễn phí và rất nhanh!
         </div>
     </div>
 </div>

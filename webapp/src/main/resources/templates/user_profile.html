@@ -1,7 +1,7 @@
-<html lang="en">
+<html lang="vi">
 <head>
     {{header_init}}
-    <title>{{username}} on elephantchess.io</title>
+    <title>{{username}} trên elephantchess.io</title>
     {{meta_no_index_conditional}}
     {{description_meta}}
     <link rel="stylesheet" href="/css/user-profile.css"/>
@@ -32,53 +32,53 @@
     <hr/>
     {{user_profile_description}}
     <br/>
-    <h1>Game Stats</h1>
+    <h1>Thống kê ván đấu</h1>
     <hr/>
     <div class="center-content-div">
         {{profile_game_stats_table}}
     </div>
     <br/>
     <div id="latest-games-section" style="display: none;">
-        <h1>Latest Games</h1>
+        <h1>Ván đấu gần đây</h1>
         <hr/>
         <div id="pvp-games-container">
             {{game_thumb}}[[iterations:4; {gameType: 'pvp', parentClass: 'pvp-game-thumb'}]]
         </div>
         <div class="center-content-div browse-more-link-container">
             <a id="browse-more-games-link" href="/@/{{username}}/browse-pvp-games" class="browse-more-link">
-                Browse More Games
+                Xem thêm ván đấu
             </a>
         </div>
     </div>
     <div id="puzzle-stats-section">
         <br/>
-        <h1>Puzzle Stats</h1>
+        <h1>Thống kê câu đố</h1>
         <hr/>
         <div id="profile-puzzle-stats-placeholder" class="empty-block-placeholder">
-            <span class="loading">Loading...</span>
+            <span class="loading">Đang tải...</span>
         </div>
         <div id="profile-puzzle-stats-data">
             <table id="summary-data-table">
                 <tr>
-                    <td class="header-cell">Rating</td>
+                    <td class="header-cell">Điểm</td>
                     <td class="value-cell"><span id="summary-data-rating"></span></td>
                 </tr>
                 <tr>
-                    <td class="header-cell">Max rating</td>
+                    <td class="header-cell">Điểm cao nhất</td>
                     <td class="value-cell"><span id="summary-data-max-rating"></span></td>
                 </tr>
                 <tr>
-                    <td class="header-cell">Total played</td>
+                    <td class="header-cell">Tổng đã chơi</td>
                     <td class="value-cell"><span id="summary-data-total-played"></span></td>
                 </tr>
             </table>
             <div class="center-content-div" style="flex-flow: column">
                 <div class="puzzle-chart-container center-content-div">
-                    <h2>Rating History</h2>
+                    <h2>Lịch sử điểm</h2>
                     <div id="rating-line-chart"></div>
                 </div>
                 <div class="puzzle-chart-container center-content-div" style="margin-top: 20px;">
-                    <h2>Latest Activity</h2>
+                    <h2>Hoạt động gần đây</h2>
                     <div id="number-bar-chart"></div>
                 </div>
             </div>

@@ -105,7 +105,7 @@ class PlayBotModalHandler extends ModalHandler {
             this.#depthInput.value = String(Math.min(DEFAULT_DEPTH, Number(this.#depthInput.max)));
             addToolTip(
                 document.getElementById('play-bot-depth-box'),
-                'You must be logged in to play with depth greater than 6. You can make an account for free.'
+                'Bạn phải đăng nhập để chơi với độ sâu lớn hơn 6. Bạn có thể tạo tài khoản miễn phí.'
             );
 
             getElementsByClassNameArray('add-asterisk').forEach(element => {

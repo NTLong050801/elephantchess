@@ -347,11 +347,11 @@ class AnalysisBoardPage extends BasePage {
                     this.#updateStartFen(startFen);
                     this.#updateUiForSaveAnalysisResponse(response);
                     this.#saveAnalysisButton.classList.remove('app-buttons-disabled');
-                    UI.pushInfoNotification(`Analysis saved with version ${response.version} and new starting position`, ANALYSIS_NOTIFICATION_TIMEOUT);
+                    UI.pushInfoNotification(`Đã lưu phân tích phiên bản ${response.version} với vị trí bắt đầu mới`, ANALYSIS_NOTIFICATION_TIMEOUT);
                 });
             } else {
                 this.#updateStartFen(startFen);
-                UI.pushInfoNotification(`Starting position updated`, ANALYSIS_NOTIFICATION_TIMEOUT);
+                UI.pushInfoNotification(`Đã cập nhật vị trí bắt đầu`, ANALYSIS_NOTIFICATION_TIMEOUT);
             }
         }
     }
@@ -378,7 +378,7 @@ class AnalysisBoardPage extends BasePage {
 
         const createdByLabel = document.createElement('span');
         createdByLabel.className = 'info-about-analysis-parts';
-        createdByLabel.innerHTML = HTML_WHITE_SPACE + 'created by' + HTML_WHITE_SPACE;
+        createdByLabel.innerHTML = HTML_WHITE_SPACE + 'tạo bởi' + HTML_WHITE_SPACE;
 
         const username = buildUserLinkDiv(this.#analysis.username);
         username.className = 'info-about-analysis-parts';
@@ -402,7 +402,7 @@ class AnalysisBoardPage extends BasePage {
      * Once the analysis has been persisted for the first time, we show 'update'
      */
     #showUpdateAnalysis() {
-        this.#saveAnalysisButton.value = 'update analysis';
+        this.#saveAnalysisButton.value = 'cập nhật phân tích';
         this.#renameAnalysisButton.classList.remove('app-buttons-disabled');
     }
 
@@ -485,7 +485,7 @@ class AnalysisBoardPage extends BasePage {
         this.#fenCopyIcon.addEventListener('click', () => {
             copyTextToClipboardAndNotify(
                 this.#fenExportInput.value,
-                'FEN copied to clipboard!'
+                'Đã sao chép FEN vào bộ nhớ tạm!'
             );
         })
     }
@@ -585,7 +585,7 @@ class AnalysisBoardPage extends BasePage {
                 this.#analysisVersion = response.version;
                 this.#analysisCache.analysisId = response.analysisId;
 
-                UI.pushInfoNotification('Analysis saved with version ' + response.version, ANALYSIS_NOTIFICATION_TIMEOUT);
+                UI.pushInfoNotification('Đã lưu phân tích phiên bản ' + response.version, ANALYSIS_NOTIFICATION_TIMEOUT);
                 this.#saveAnalysisButton.classList.remove('app-buttons-disabled');
 
                 if (response.version === 1) {
@@ -602,7 +602,7 @@ class AnalysisBoardPage extends BasePage {
 
         if (this.#analysisId != null) {
             this.#client.renameAnalysis(this.#analysisId, this.#analysisNameField.value, response => {
-                let html = `Analysis has been renamed to " ${this.#analysisNameField.value}"`;
+                let html = `Phân tích đã được đổi tên thành " ${this.#analysisNameField.value}"`;
                 UI.pushInfoNotification(html, ANALYSIS_NOTIFICATION_TIMEOUT);
                 this.#renameAnalysisButton.classList.remove('app-buttons-disabled');
                 this.#analysisVersionLastUpdatedLabel.innerText = formatTimestampToDateTime(response.lastUpdated);

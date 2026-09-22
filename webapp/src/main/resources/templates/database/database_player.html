@@ -1,7 +1,7 @@
-<html lang="en">
+<html lang="vi">
 <head>
     {{header_init}}
-    <title>{{page_title}} – Chinese Chess (Xiangqi) Player Profile</title>
+    <title>{{page_title}} – Hồ sơ Kỳ thủ Cờ Tướng (Xiangqi)</title>
     {{meta_no_index_conditional}}
     {{description_meta}}
     {{author_meta}}
@@ -23,34 +23,34 @@
     <div id="player-profile-description">
         {{player_profile_description}}
         <div class="profile-sources">
-            <h3>Sources</h3>
+            <h3>Nguồn</h3>
             <ul>{{player_profile_sources}}</ul>
         </div>
     </div>
     <div id="profile-actions">
-        <a id="view-current-version-link" href="/database/player/{{player_name_encoded}}">view current version</a>
-        <a href="/database/player/{{player_name_encoded}}/edit-history">view edit history</a>
-        <a href="/database/player/{{player_name_encoded}}/edit">edit profile</a>
+        <a id="view-current-version-link" href="/database/player/{{player_name_encoded}}">xem phiên bản hiện tại</a>
+        <a href="/database/player/{{player_name_encoded}}/edit-history">xem lịch sử chỉnh sửa</a>
+        <a href="/database/player/{{player_name_encoded}}/edit">chỉnh sửa hồ sơ</a>
     </div>
-    <h1>Statistics</h1>
+    <h1>Thống kê</h1>
     <div class="center-content-div">
         <div id="player-stats-chart"></div>
     </div>
     <div id="include-possible-duplicates-data-warning">
         <div>
-            (*) Includes data from "Possible Duplicates" (see below)
+            (*) Bao gồm dữ liệu từ "Bản ghi trùng lặp có thể" (xem bên dưới)
         </div>
     </div>
     {{database_player_openings_section_conditional}}
-    <h1>Latest Games</h1>
+    <h1>Ván Đấu Gần Đây</h1>
     <div class="latest-games-container">
         {{game_thumb}}[[iterations:4; {gameType: 'db', parentClass: 'latest-game-thumb'}]]
     </div>
     <div class="center-content-div browse-more-link-container">
-        <a href="/database/player/{{player_name_encoded}}/games" class="browse-more-link">Browse Games</a>
+        <a href="/database/player/{{player_name_encoded}}/games" class="browse-more-link">Duyệt thêm ván đấu</a>
     </div>
     <div id="possible-duplicate-block" style="display: none;">
-        <h1>Possible Duplicates</h1>
+        <h1>Bản Ghi Trùng Lặp Có Thể</h1>
         <ul></ul>
     </div>
 </div>

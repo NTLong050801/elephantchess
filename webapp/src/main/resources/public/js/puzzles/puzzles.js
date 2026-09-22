@@ -137,7 +137,7 @@ class PuzzlesPage extends BasePage {
         this.#puzzleIdLabel.addEventListener('click', () => {
             copyTextToClipboardAndNotify(
                 getFullHost() + '/puzzles?id=' + this.#puzzleState.id,
-                'Puzzle link copied to clipboard!'
+                'Đã sao chép liên kết câu đố vào clipboard!'
             );
         });
 
@@ -257,13 +257,13 @@ class PuzzlesPage extends BasePage {
     }
 
     #hidePuzzleMetadata() {
-        this.#puzzleCategoriesLabel.innerText = 'hidden';
+        this.#puzzleCategoriesLabel.innerText = 'ẩn';
         this.#puzzleCategoriesLabel.classList.add('hidden-values');
 
-        this.#puzzleRatingLabel.innerText = 'hidden';
+        this.#puzzleRatingLabel.innerText = 'ẩn';
         this.#puzzleRatingLabel.classList.add('hidden-values');
 
-        this.#gameInfoLabel.innerText = 'hidden';
+        this.#gameInfoLabel.innerText = 'ẩn';
         this.#gameInfoLabel.classList.add('hidden-values');
     }
 
@@ -397,9 +397,9 @@ class PuzzlesPage extends BasePage {
                         this.#voteThumbsUp.classList.add('voted-against');
                         this.#voteThumbsDown.classList.add('voted-for');
                     }
-                    UI.pushInfoNotification('Thank you for you feedback!');
+                    UI.pushInfoNotification('Cảm ơn bạn đã phản hồi!');
                 } else {
-                    UI.pushErrorNotification('Votes can only be submitted within 10 minutes of completing the puzzle.');
+                    UI.pushErrorNotification('Chỉ có thể gửi bình chọn trong vòng 10 phút sau khi hoàn thành câu đố.');
                 }
             });
         } else {

@@ -42,13 +42,13 @@ class ContactPage extends BasePage {
 
             const validationErrors = [];
             if (!isEmailValid) {
-                validationErrors.push('e-mail address is not properly formatted');
+                validationErrors.push('địa chỉ e-mail không đúng định dạng');
             }
             if (!isMessageValid) {
-                validationErrors.push(`message must be between ${MESSAGE_MIN_CHARS} and ${MESSAGE_MAX_CHARS} characters`);
+                validationErrors.push(`tin nhắn phải từ ${MESSAGE_MIN_CHARS} đến ${MESSAGE_MAX_CHARS} ký tự`);
             }
             if (!isCaptchaValid) {
-                validationErrors.push('reCAPTCHA is invalid')
+                validationErrors.push('reCAPTCHA không hợp lệ')
             }
 
             if (validationErrors.length === 0) {
@@ -64,7 +64,7 @@ class ContactPage extends BasePage {
                     this.#textArea.disabled = true;
 
                     const timeout = 5_000;
-                    UI.pushInfoNotification('Message has been sent to us!', timeout);
+                    UI.pushInfoNotification('Tin nhắn của bạn đã được gửi!', timeout);
                     setInterval(() => window.location.href = '/', timeout);
                 });
             } else {

@@ -1,7 +1,7 @@
-<html lang="en">
+<html lang="vi">
 <head>
     {{header_init}}
-    <title>Settings</title>
+    <title>Cài đặt</title>
     {{meta_no_index}}
     <link rel="stylesheet" href="/css/common/nice-table.css"/>
     <link rel="stylesheet" href="/css/user-settings.css"/>
@@ -13,68 +13,68 @@
 <body>
 {{body_init}}
 <div class="main-container-text-extended-smaller">
-    <h1>Profile Settings</h1>
+    <h1>Cài đặt hồ sơ</h1>
     <hr/>
-    <h4 class="label">Description</h4>
+    <h4 class="label">Mô tả</h4>
     <label for="description"></label>
     <textarea id="description" rows="8" cols="50"></textarea>
     <div id="description-character-counter" class="character-counter"></div>
-    <h4 class="label">Country</h4>
+    <h4 class="label">Quốc gia</h4>
     <label for="countries"></label>
     <select name="countries" id="countries">
-        <option value="none">none</option>
+        <option value="none">không có</option>
     </select>
     <br/>
-    <input id="save-profile-button" type="button" class="app-buttons-bigger" value="save">
-    <h1>Email Notifications Settings</h1>
+    <input id="save-profile-button" type="button" class="app-buttons-bigger" value="lưu">
+    <h1>Cài đặt thông báo qua email</h1>
     <hr/>
     <table id="notifications-settings-table"></table>
-    <input id="save-notifications-button" type="button" class="app-buttons-bigger" value="save">
-    <h1>Email Address</h1>
+    <input id="save-notifications-button" type="button" class="app-buttons-bigger" value="lưu">
+    <h1>Địa chỉ email</h1>
     <hr/>
     <div id="email-manually-confirmed" class="little-message little-message-flattened valid-data hidden">
         <div class="icon-container">
-            <img src="/images/icons/right-icon.png" alt="valid"/>
+            <img src="/images/icons/right-icon.png" alt="hợp lệ"/>
         </div>
         <div class="message-container">
-            Your email address has been manually confirmed.
+            Địa chỉ email của bạn đã được xác nhận thủ công.
         </div>
     </div>
     <div id="email-automated-valid" class="little-message little-message-flattened valid-data hidden">
         <div class="icon-container">
-            <img src="/images/icons/right-icon.png" alt="valid"/>
+            <img src="/images/icons/right-icon.png" alt="hợp lệ"/>
         </div>
         <div class="message-container">
-            Your email address has been automatically verified by our email validation service. You can also
-            confirm it manually by clicking the link we sent you at sign up.
+            Địa chỉ email của bạn đã được tự động xác minh bởi dịch vụ kiểm tra email của chúng tôi. Bạn cũng có thể
+            xác nhận thủ công bằng cách nhấp vào liên kết chúng tôi đã gửi khi bạn đăng ký.
         </div>
     </div>
     <div id="email-automated-bounced" class="little-message little-message-flattened invalid-data hidden">
         <div class="icon-container">
-            <img src="/images/icons/wrong-icon.png" alt="invalid"/>
+            <img src="/images/icons/wrong-icon.png" alt="không hợp lệ"/>
         </div>
         <div class="message-container">
-            Emails sent to your address have bounced (the inbox may not exist or be full). Password recovery and
-            notifications will not be sent. Please <a href="/about">contact us</a> if you want to resolve this issue.
+            Email gửi đến địa chỉ của bạn đã bị trả lại (hộp thư có thể không tồn tại hoặc đã đầy). Email khôi phục mật khẩu và
+            thông báo sẽ không được gửi. Vui lòng <a href="/about">liên hệ chúng tôi</a> nếu bạn muốn giải quyết vấn đề này.
         </div>
     </div>
     <div id="email-automated-invalid" class="little-message little-message-flattened invalid-data hidden">
         <div class="icon-container">
-            <img src="/images/icons/wrong-icon.png" alt="invalid"/>
+            <img src="/images/icons/wrong-icon.png" alt="không hợp lệ"/>
         </div>
         <div class="message-container">
-            Your email has been flagged as invalid by our email validation service. Password recovery and
-            notifications will not be sent. Please <a href="/about">contact us</a> if you want to resolve this issue.
+            Email của bạn đã bị dịch vụ kiểm tra email của chúng tôi đánh dấu là không hợp lệ. Email khôi phục mật khẩu và
+            thông báo sẽ không được gửi. Vui lòng <a href="/about">liên hệ chúng tôi</a> nếu bạn muốn giải quyết vấn đề này.
         </div>
     </div>
     <div id="email-validity-unknown" class="little-message little-message-flattened unknown-data hidden">
         <div class="icon-container">
-            <img src="/images/icons/question.png" alt="unknown"/>
+            <img src="/images/icons/question.png" alt="không xác định"/>
         </div>
         <div class="message-container">
-            It is not known yet whether your email is valid or not. You can confirm it by clicking the link we sent
-            you at sign up. Until your email is confirmed, password recovery and notifications will not be sent.
-            Please <a href="/about">contact us</a> if you want to resolve this issue.
+            Chưa xác định được email của bạn có hợp lệ hay không. Bạn có thể xác nhận bằng cách nhấp vào liên kết chúng tôi đã gửi
+            khi bạn đăng ký. Cho đến khi email được xác nhận, email khôi phục mật khẩu và thông báo sẽ không được gửi.
+            Vui lòng <a href="/about">liên hệ chúng tôi</a> nếu bạn muốn giải quyết vấn đề này.
         </div>
     </div>
     <div id="email-address-container">
@@ -82,30 +82,30 @@
     </div>
     <div id="resend-email-confirmation-container" class="hidden">
         <input id="resend-email-confirmation-button" type="button" class="app-buttons-bigger"
-               value="resend confirmation email"/>
+               value="gửi lại email xác nhận"/>
     </div>
-    <h1>Latest Sessions</h1>
+    <h1>Phiên gần đây</h1>
     <hr/>
     <div id="user-sessions-table-container">
         <table id="user-sessions-table" class="nice-table nice-table-striped nice-table-hover">
             <thead>
             <tr>
-                <th class="label-cell">os</th>
-                <th class="label-cell">agent</th>
-                <th class="label-cell">country</th>
-                <th class="label-cell">region</th>
-                <th class="label-cell">city</th>
+                <th class="label-cell">hệ điều hành</th>
+                <th class="label-cell">trình duyệt</th>
+                <th class="label-cell">quốc gia</th>
+                <th class="label-cell">vùng</th>
+                <th class="label-cell">thành phố</th>
                 <th class="label-cell">IP</th>
-                <th class="label-cell">created</th>
-                <th class="label-cell">updated</th>
+                <th class="label-cell">đã tạo</th>
+                <th class="label-cell">cập nhật</th>
             </tr>
             </thead>
             <tbody>
             </tbody>
         </table>
     </div>
-    <p id="user-sessions-empty-message" class="hidden">No sessions found.</p>
-    <a id="all-sessions-link" class="hidden" href="/user/settings/sessions">See all sessions</a>
+    <p id="user-sessions-empty-message" class="hidden">Không tìm thấy phiên nào.</p>
+    <a id="all-sessions-link" class="hidden" href="/user/settings/sessions">Xem tất cả phiên</a>
 </div>
 </body>
 </html>

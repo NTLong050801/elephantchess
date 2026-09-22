@@ -54,13 +54,7 @@ class SignUpModalHandler extends ModalHandler {
     constructor() {
         super();
         this.#signUpButton.addEventListener('click', () => {
-            const isCaptchaValid = grecaptcha.getResponse() !== '';
-
-            if (isCaptchaValid) {
-                this.#sendSignUpRequest();
-            } else {
-                UI.showValidationErrors(['reCAPTCHA is invalid']);
-            }
+            this.#sendSignUpRequest();
         });
 
         this.#usernameField.addEventListener('input', () => this.#scheduleValidation());
@@ -68,11 +62,6 @@ class SignUpModalHandler extends ModalHandler {
         this.#passwordField.addEventListener('input', () => this.#scheduleValidation());
 
         this.#usernameField.focus();
-
-        const captchaContainer = document.getElementById('captcha-container');
-        grecaptcha.ready(function () {
-            grecaptcha.render(captchaContainer, {sitekey: RE_CAPTCHA_SITE_KEY});
-        });
 
         this.#loginSpan.addEventListener('click', () => showLoginModal());
     }

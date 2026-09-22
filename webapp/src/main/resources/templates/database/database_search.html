@@ -1,9 +1,9 @@
-<html lang="en">
+<html lang="vi">
 <head>
     {{header_init}}
-    <title>Chinese Chess (Xiangqi) Games Database – Search 100,000+ Games</title>
+    <title>Cơ Sở Dữ Liệu Ván Cờ Tướng (Xiangqi) – Tìm Kiếm Hơn 100.000 Ván Đấu</title>
     <meta name="description"
-          content="Search among 100,000+ Chinese Chess (Xiangqi) games from the best players worldwide. Free Xiangqi games database with statistics, openings, players and tournaments."/>
+          content="Tìm kiếm trong hơn 100.000 ván Cờ Tướng (Xiangqi) từ những kỳ thủ hàng đầu thế giới. Cơ sở dữ liệu ván cờ Xiangqi miễn phí với thống kê, khai cuộc, kỳ thủ và giải đấu."/>
     <meta property="og:url" content="https://elephantchess.io/database">
     <link rel="canonical" href="https://elephantchess.io/database">
     <link rel="stylesheet" href="/css/my-user-data-items.css"/>
@@ -18,22 +18,22 @@
 <body>
 {{body_init}}
 <div class="main-container-text">
-    <h1>Database Search</h1>
+    <h1>Tìm Kiếm Cơ Sở Dữ Liệu</h1>
     <hr/>
     <div class="database-search-layout">
         <div class="database-search-left">
             <p style="margin-block-start: 0;">
-                Search among <span id="total-games">--</span> games in the database.
+                Tìm kiếm trong số <span id="total-games">--</span> ván đấu trong cơ sở dữ liệu.
             </p>
             <p>
-                Games in this database only include games from tournaments. Games played on elephantchess.io itself are
-                not included and can not be searched at the moment.
+                Các ván đấu trong cơ sở dữ liệu này chỉ bao gồm các ván đấu từ giải đấu. Các ván đấu được chơi trên chính elephantchess.io
+                không được bao gồm và hiện tại không thể tìm kiếm được.
             </p>
             <div class="search-container">
                 <label class="search-label">
-                    <span>Player</span>
+                    <span>Kỳ thủ</span>
                     <span class="list-of-entities-link">
-                        <a href="/database/players?medium=database-search">list all players</a>
+                        <a href="/database/players?medium=database-search">xem tất cả kỳ thủ</a>
                     </span>
                     <input id="player-search" type="text"/>
                 </label>
@@ -43,24 +43,24 @@
                 <div id="player-color-options" class="player-color-options player-color-options-disabled">
                     <label id="player-color-red-label">
                         <input id="player-color-red-input" type="radio" name="player-color" value="red" disabled/>
-                        Playing Red
+                        Cầm quân Đỏ
                     </label>
                     <label id="player-color-black-label">
                         <input id="player-color-black-input" type="radio" name="player-color" value="black" disabled/>
-                        Playing Black
+                        Cầm quân Đen
                     </label>
                     <label id="player-color-any-label">
                         <input id="player-color-any-input" type="radio" name="player-color" value="both" disabled
                                checked/>
-                        Playing Any Color
+                        Bất kỳ màu nào
                     </label>
                 </div>
             </div>
             <div class="search-container">
                 <label class="search-label">
-                    <span>Event</span>
+                    <span>Giải đấu</span>
                     <span class="list-of-entities-link">
-                        <a href="/database/events?medium=database-search">list all events</a>
+                        <a href="/database/events?medium=database-search">xem tất cả giải đấu</a>
                     </span>
                     <input id="event-search" type="text"/>
                 </label>
@@ -70,40 +70,40 @@
             </div>
             <div id="date-range-search" class="search-container">
                 <div>
-                    <span class="search-label">Date</span>
+                    <span class="search-label">Ngày</span>
                 </div>
                 <div id="date-range-search-inputs">
                     <div>
                         <label><input type="text" name="start" class="datepicker-field"></label>
-                        <span>to</span>
+                        <span>đến</span>
                         <label><input type="text" name="end" class="datepicker-field"></label>
                     </div>
                     <div id="relative-time-options-block">
-                        <a href="#" class="action-link" id="range-selector-ytd">YTD</a>
+                        <a href="#" class="action-link" id="range-selector-ytd">Từ đầu năm</a>
                         <span> </span>
-                        <a href="#" class="action-link" id="range-selector-12m">12M</a>
+                        <a href="#" class="action-link" id="range-selector-12m">12 tháng</a>
                         <span> </span>
-                        <a href="#" class="action-link" id="range-selector-mtd">MTD</a>
+                        <a href="#" class="action-link" id="range-selector-mtd">Từ đầu tháng</a>
                         <span> </span>
-                        <a href="#" class="action-link" id="range-selector-30d">30D</a>
+                        <a href="#" class="action-link" id="range-selector-30d">30 ngày</a>
                     </div>
                 </div>
             </div>
             <div class="search-container">
                 <div>
-                    <span class="search-label">Position (FEN)</span>
+                    <span class="search-label">Thế cờ (FEN)</span>
                 </div>
                 <input id="fen-search" type="text"/>
             </div>
             <div id="buttons-container">
-                <input type="button" value="Search" id="search-button" class="app-buttons-bigger"/>
-                <input type="button" value="Clear" id="clear-button" class="app-buttons-bigger"/>
+                <input type="button" value="Tìm kiếm" id="search-button" class="app-buttons-bigger"/>
+                <input type="button" value="Xóa" id="clear-button" class="app-buttons-bigger"/>
             </div>
         </div>
         <div class="database-search-right">
-            <h2>Featured Players</h2>
+            <h2>Kỳ Thủ Tiêu Biểu</h2>
             <div id="featured-players-list">
-                Loading...
+                Đang tải...
             </div>
         </div>
     </div>
@@ -111,10 +111,10 @@
         <div id="search-results">
         </div>
         <div id="is-loading-message">
-            Loading more games...
+            Đang tải thêm ván đấu...
         </div>
         <div id="end-of-pagination-message">
-            No more games to load.
+            Không còn ván đấu nào để tải.
         </div>
     </div>
 </div>

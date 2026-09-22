@@ -255,10 +255,10 @@ class ChatBoxWidget {
         const names = typingUsers.map((user) => user.username);
         let label;
         if (names.length === 1) {
-            label = `${names[0]} is typing…`;
+            label = `${names[0]} đang nhập…`;
         } else {
             const allButLast = names.slice(0, -1).join(', ');
-            label = `${allButLast} and ${names[names.length - 1]} are typing…`;
+            label = `${allButLast} và ${names[names.length - 1]} đang nhập…`;
         }
 
         this.#typingIndicator.innerText = label;

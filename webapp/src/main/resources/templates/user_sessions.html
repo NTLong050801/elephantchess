@@ -1,7 +1,7 @@
-<html lang="en">
+<html lang="vi">
 <head>
     {{header_init}}
-    <title>Sessions</title>
+    <title>Phiên Đăng Nhập</title>
     {{meta_no_index}}
     <link rel="stylesheet" href="/css/common/nice-table.css"/>
     <link rel="stylesheet" href="/css/user-settings.css"/>
@@ -13,37 +13,37 @@
 <body>
 {{body_init}}
 <div class="main-container-text-extended-larger">
-    <h1>Sessions</h1>
+    <h1>Phiên Đăng Nhập</h1>
     <hr/>
     <div id="sessions-actions-container" class="hidden">
-        <input id="delete-sessions-button" type="button" class="app-buttons-bigger" value="delete selected">
-        <input id="delete-all-sessions-button" type="button" class="app-buttons-bigger" value="delete all">
+        <input id="delete-sessions-button" type="button" class="app-buttons-bigger" value="xóa đã chọn">
+        <input id="delete-all-sessions-button" type="button" class="app-buttons-bigger" value="xóa tất cả">
     </div>
     <div id="user-sessions-table-container">
         <table id="user-sessions-table" class="nice-table nice-table-striped nice-table-hover">
             <thead>
             <tr>
                 <th></th>
-                <th class="label-cell">os</th>
-                <th class="label-cell">agent</th>
-                <th class="label-cell">country</th>
-                <th class="label-cell">region</th>
-                <th class="label-cell">city</th>
+                <th class="label-cell">hệ điều hành</th>
+                <th class="label-cell">trình duyệt</th>
+                <th class="label-cell">quốc gia</th>
+                <th class="label-cell">vùng</th>
+                <th class="label-cell">thành phố</th>
                 <th class="label-cell">IP</th>
-                <th class="label-cell">created</th>
-                <th class="label-cell">updated</th>
+                <th class="label-cell">tạo lúc</th>
+                <th class="label-cell">cập nhật</th>
             </tr>
             </thead>
             <tbody>
             </tbody>
         </table>
     </div>
-    <p id="user-sessions-empty-message" class="hidden">No sessions found.</p>
+    <p id="user-sessions-empty-message" class="hidden">Không tìm thấy phiên nào.</p>
     <div id="is-loading-message" style="display: none;">
-        Loading more sessions...
+        Đang tải thêm phiên...
     </div>
     <div id="end-of-pagination-message" style="display: none;">
-        No more sessions to show
+        Không còn phiên nào để hiển thị
     </div>
 </div>
 </body>

@@ -1,9 +1,9 @@
-<html lang="en">
+<html lang="vi">
 <head>
     {{header_init}}
-    <title>{{page_title}} Games</title>
+    <title>Ván Đấu {{page_title}}</title>
     <meta name="description"
-          content="Browser Database (DB) games played by the best players in tournaments and events.">
+          content="Duyệt các ván đấu trong Cơ Sở Dữ Liệu (DB) của những kỳ thủ hàng đầu trong các giải đấu và sự kiện.">
     <link rel="stylesheet" href="/css/browse-games.css"/>
     <script defer src="/js/widgets/board-gui.js"></script>
     <script defer src="/js/widgets/game-thumb.js"></script>
@@ -15,19 +15,19 @@
 <body>
 {{body_init}}
 <div class="main-container-text-extended">
-    <h1>{{page_title}} Games</h1>
+    <h1>Ván Đấu {{page_title}}</h1>
     <hr class="only-desktop"/>
     <div id="db-games-container">
         {{game_thumb}}[[iterations:6; {gameType: 'db', parentClass: 'db-game-thumb'}]]
     </div>
     <div id="is-loading-message" style="display: none;">
-        Loading more games...
+        Đang tải thêm ván đấu...
     </div>
     <div id="end-of-pagination-message" style="display: none;">
-        No more games to show
+        Không còn ván đấu nào để hiển thị
     </div>
     <div id="no-games-message" class="empty-list-message" style="display: none;">
-        No games found for this player.
+        Không tìm thấy ván đấu nào cho kỳ thủ này.
     </div>
 </div>
 {{kofi_floating_widget}}

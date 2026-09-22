@@ -61,11 +61,11 @@ class LoginModalHandler extends ModalHandler {
         if (this.#loginField.value.trim() === '') {
             this.#loginField.classList.add('incorrect-data');
             this.#passwordField.classList.add('incorrect-data');
-            UI.pushErrorNotification('Please input login');
+            UI.pushErrorNotification('Vui lòng nhập tên đăng nhập');
         } else if (this.#passwordField.value.trim() === '') {
             this.#loginField.classList.add('incorrect-data');
             this.#passwordField.classList.add('incorrect-data');
-            UI.pushErrorNotification('Please input password');
+            UI.pushErrorNotification('Vui lòng nhập mật khẩu');
         } else {
             const responseHandler =
                 new LoginResponseHandler(
@@ -81,7 +81,7 @@ class LoginModalHandler extends ModalHandler {
                         eraseAllIdentificationCookies();
                         this.#loginField.classList.add('incorrect-data');
                         this.#passwordField.classList.add('incorrect-data');
-                        UI.pushErrorNotification('Invalid credentials');
+                        UI.pushErrorNotification('Thông tin đăng nhập không hợp lệ');
                     }
                 );
 

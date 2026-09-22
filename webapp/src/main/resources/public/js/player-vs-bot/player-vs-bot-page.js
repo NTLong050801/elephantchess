@@ -17,8 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-const ANALYZE_BUTTON_TOOLTIP_ENABLED = 'You can analyse the game with the Analysis Board tool';
-const ANALYZE_BUTTON_TOOLTIP_DISABLED = `Game must be finished before you can analyze them. If you want to analyze this game now, you have to resign first.`;
+const ANALYZE_BUTTON_TOOLTIP_ENABLED = 'Bạn có thể phân tích ván cờ bằng công cụ Bàn Phân Tích';
+const ANALYZE_BUTTON_TOOLTIP_DISABLED = `Ván cờ phải kết thúc trước khi bạn có thể phân tích. Nếu bạn muốn phân tích ván cờ này ngay bây giờ, bạn phải đầu hàng trước.`;
 
 class BotGameSpectatorWebSocketSession {
 
@@ -129,7 +129,7 @@ class PlayerVsBotPage extends BasePage {
                 this.#moveTreeWidget.startFen = botGameDto.startFen;
                 let infoPlayer = document.getElementById('info-player');
                 if (botGameDto.isAnonymous) {
-                    infoPlayer.innerText = 'anonymous';
+                    infoPlayer.innerText = 'ẩn danh';
                 } else {
                     infoPlayer.append(
                         buildUsernameSpan(
@@ -213,7 +213,7 @@ class PlayerVsBotPage extends BasePage {
 
     #handleClickedResignButton() {
         let span = document.createElement('span');
-        span.innerText = 'Are you sure you want to resign?';
+        span.innerText = 'Bạn có chắc muốn đầu hàng không?';
         let yesCallback = () => {
             this.#controller.resign(() => {
                 this.#boardGui.disablePlayerMove();
@@ -221,15 +221,15 @@ class PlayerVsBotPage extends BasePage {
                 this.#updateButtonsEnabled();
             });
         };
-        let yesButtonText = 'resign';
+        let yesButtonText = 'đầu hàng';
         let noCallback = () => UI.hideModal(null);
-        let noButtonText = 'no';
+        let noButtonText = 'không';
         UI.showConfirmationModal(span, yesCallback, yesButtonText, noCallback, noButtonText);
     }
 
     #handleClickedCancelButton() {
         const span = document.createElement('span');
-        span.innerText = 'Are you sure you want to cancel this game?';
+        span.innerText = 'Bạn có chắc muốn hủy ván cờ này không?';
         const yesCallback = () => {
             this.#controller.cancel(() => {
                 this.#boardGui.disablePlayerMove();
@@ -237,9 +237,9 @@ class PlayerVsBotPage extends BasePage {
                 this.#updateButtonsEnabled();
             });
         };
-        const yesButtonText = 'yes';
+        const yesButtonText = 'có';
         const noCallback = () => UI.hideModal(null);
-        const noButtonText = 'no';
+        const noButtonText = 'không';
         UI.showConfirmationModal(span, yesCallback, yesButtonText, noCallback, noButtonText);
     }
 
@@ -277,17 +277,17 @@ class PlayerVsBotPage extends BasePage {
         let victoryType = '';
         switch (this.#controller.gameStatus()) {
             case GameEventType.CANCELED:
-                label = 'Canceled';
+                label = 'Đã hủy';
                 break;
             case GameEventType.RESIGNED:
             case GameEventType.AUTO_RESIGNED:
-                victoryType = ' (resignation)';
+                victoryType = ' (đầu hàng)';
                 break;
             case GameEventType.CHECKMATED:
-                victoryType = ' (checkmate)';
+                victoryType = ' (chiếu hết)';
                 break;
             case GameEventType.STALEMATED:
-                victoryType = ' (stalemate)';
+                victoryType = ' (hòa cờ)';
                 break;
             default:
                 break;
@@ -295,13 +295,13 @@ class PlayerVsBotPage extends BasePage {
 
         switch (this.#controller.userOutcome()) {
             case UserOutcome.WIN:
-                label = 'Human victory' + victoryType;
+                label = 'Người thắng' + victoryType;
                 break;
             case UserOutcome.LOSS:
-                label = 'Bot victory' + victoryType;
+                label = 'Máy thắng' + victoryType;
                 break;
             case UserOutcome.DRAW:
-                label = 'Draw';
+                label = 'Hòa';
                 break;
         }
 
@@ -316,7 +316,7 @@ class PlayerVsBotPage extends BasePage {
             });
         } else {
             const tooltip = this.#controller.isManchu()
-                ? 'Analysis is not supported for Manchu variant games'
+                ? 'Phân tích không được hỗ trợ cho ván cờ biến thể Manchu'
                 : ANALYZE_BUTTON_TOOLTIP_DISABLED;
             this.#analyzeButtons.forEach((button) => {
                 button.classList.add('app-buttons-disabled');

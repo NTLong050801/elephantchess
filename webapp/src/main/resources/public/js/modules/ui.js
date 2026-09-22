@@ -205,7 +205,7 @@ function buildVariantCell(variant) {
     const isManchu = variant === Variant.MANCHU;
     const cell = buildDivWithClass('variant-cell');
     const symbol = buildDivWithTextAndClass(isManchu ? '统' : '象', 'variant-symbol');
-    symbol.title = isManchu ? 'Manchu chess (or Yitong)' : 'Xiangqi (Chinese chess)';
+    symbol.title = isManchu ? 'Cờ Manchu (hay Yitong)' : 'Cờ Tướng (Cờ Trung Quốc)';
     const textContent = isManchu ? 'Manchu' : 'Xiangqi';
     cell.append(symbol, buildDivWithTextAndClass(textContent, 'variant-name'));
     return cell;
@@ -302,15 +302,15 @@ function buildColorSpan(color) {
     switch (color) {
         case Color.RED:
             colorSpan.className = 'red-color';
-            colorSpan.innerText = 'Red';
+            colorSpan.innerText = 'Đỏ';
             break;
         case Color.BLACK:
             colorSpan.className = 'black-color';
-            colorSpan.innerText = 'Black';
+            colorSpan.innerText = 'Đen';
             break;
         default:
             colorSpan.className = 'any-color';
-            colorSpan.innerText = 'Any';
+            colorSpan.innerText = 'Bất kỳ';
             break;
     }
     return colorSpan;
@@ -705,16 +705,16 @@ class UI {
             );
 
             const toolTips = [
-                ['lobby', 'Lobby where you can join games created by other players, the number in the green circle (if visible) indicates how many games are available'],
-                ['new-game', 'Play against other players or a friend'],
-                ['play-bot', 'Play against the computer'],
-                ['puzzles', 'Train with some exercises to improve your skills'],
-                ['database', 'Find (and analyze) games played by professional during tournaments'],
-                ['analysis', 'Analysis Board tool where you can import your games and analyze them with the engine'],
-                ['global', 'Some statistics about the website'],
-                ['merch', 'Support us by purchasing some cool merch with our designs (t-shirts, hoodies, mugs, stickers, etc.)'],
-                ['support', 'Send us a tip on Ko-fi to support the project'],
-                ['about', 'More information about us and the project'],
+                ['lobby', 'Sảnh chờ nơi bạn có thể tham gia các ván cờ do người chơi khác tạo, con số trong vòng tròn xanh (nếu hiển thị) cho biết có bao nhiêu ván cờ đang chờ'],
+                ['new-game', 'Chơi với người chơi khác hoặc bạn bè'],
+                ['play-bot', 'Chơi với máy tính'],
+                ['puzzles', 'Luyện tập với các bài tập để nâng cao kỹ năng'],
+                ['database', 'Tìm (và phân tích) các ván cờ của kỳ thủ chuyên nghiệp trong các giải đấu'],
+                ['analysis', 'Công cụ Bàn phân tích nơi bạn có thể nhập ván cờ và phân tích bằng engine'],
+                ['global', 'Một số thống kê về trang web'],
+                ['merch', 'Ủng hộ chúng tôi bằng cách mua các sản phẩm lưu niệm với thiết kế của chúng tôi (áo thun, áo hoodie, cốc, sticker, v.v.)'],
+                ['support', 'Gửi ủng hộ qua Ko-fi để hỗ trợ dự án'],
+                ['about', 'Thông tin thêm về chúng tôi và dự án'],
             ];
 
             for (const [id, message] of toolTips) {
@@ -846,7 +846,7 @@ class UI {
      * @param noCallback {function}
      * @param noButtonText {string}
      */
-    static showConfirmationModal(labelText, yesCallback, yesButtonText = 'yes', noCallback, noButtonText = 'no') {
+    static showConfirmationModal(labelText, yesCallback, yesButtonText = 'có', noCallback, noButtonText = 'không') {
         UI.showModalByName(Modals.CONFIRMATION, () => {
             const labelElement = document.getElementById('confirmation-content');
             labelElement.append(labelText);
@@ -885,7 +885,7 @@ class UI {
                 })
                 .catch((error) => {
                     console.warn(error);
-                    UI.#modalBackground.innerHTML = 'Error loading modal: ' + error;
+                    UI.#modalBackground.innerHTML = 'Lỗi khi tải cửa sổ: ' + error;
                     UI.#modalBackground.style.display = 'flex';
                     UI.#pushModalHistoryState();
                 });

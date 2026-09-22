@@ -155,7 +155,7 @@ class PlayGamePage extends BasePage {
                     this.#boardGui.flipToColor(this.#gameController.gameDto.colorUserPlaysWith);
                     this.#updatePlayersInfo();
                     if (this.#gameController.gameDto.userStatus !== UserStatus.INVITEE) {
-                        UI.pushInfoNotification(`${this.#gameController.gameDto.inviteeUsername} has joined the game`, 4_000);
+                        UI.pushInfoNotification(`${this.#gameController.gameDto.inviteeUsername} đã tham gia ván cờ`, 4_000);
                         if (this.#settingsManager.isPlaySoundsEnabled) {
                             this.#joinAudio
                                 .play()
@@ -262,7 +262,7 @@ class PlayGamePage extends BasePage {
                     navigator
                         .clipboard
                         .writeText(getFullHost() + '/game?id=' + this.#gameController.gameId)
-                        .then(() => UI.pushInfoNotification('Game link copied to clipboard!'));
+                        .then(() => UI.pushInfoNotification('Đã sao chép liên kết ván cờ vào bộ nhớ tạm!'));
                 })
             );
 
@@ -342,7 +342,7 @@ class PlayGamePage extends BasePage {
 
     #initOtherInfo() {
         this.#createdLabel.innerText = formatTimestampDefaultDateFormat(this.#gameController.gameDto.created);
-        this.#ratingMode.innerText = this.#gameController.gameDto.isRated ? 'Rated' : 'Casual';
+        this.#ratingMode.innerText = this.#gameController.gameDto.isRated ? 'Xếp hạng' : 'Giao hữu';
         if (this.#gameController.gameDto.isManchu) {
             this.#variantLabel.innerText = 'Manchu';
             this.#variantRow.style.display = '';
@@ -631,9 +631,9 @@ class PlayGamePage extends BasePage {
         function colorToStatusText(color) {
             switch (color) {
                 case Color.RED:
-                    return 'Red to play';
+                    return 'Đỏ đi';
                 case Color.BLACK:
-                    return 'Black to play';
+                    return 'Đen đi';
                 default:
                     throw new Error('Incorrect color: ' + color);
             }
@@ -666,9 +666,9 @@ class PlayGamePage extends BasePage {
             if (dto.outcome != null) {
                 outcomeText = formatEnumValue(dto.outcome);
                 if (dto.userHasWon()) {
-                    outcomeText += ' (you won)';
+                    outcomeText += ' (bạn thắng)';
                 } else if (dto.userHasLost()) {
-                    outcomeText += ' (you lost)';
+                    outcomeText += ' (bạn thua)';
                 }
                 this.#outcomeRow.style.display = 'contents';
             } else {
@@ -681,13 +681,13 @@ class PlayGamePage extends BasePage {
                 updateDelta('invitee-rating-delta', update.inviteeDelta);
             }
         } else if (gameStatus === GameState.WAITING_FOR_INVITEE) {
-            statusText = 'Waiting for opponent';
+            statusText = 'Đang chờ đối thủ';
         } else if (dto.userStatus === UserStatus.SPECTATOR) {
             statusText = colorToStatusText(dto.colorToPlay);
         } else if (gameStatus === GameState.OPPONENT_TURN) {
-            statusText = 'Opponent\'s turn';
+            statusText = 'Lượt của đối thủ';
         } else if (gameStatus === GameState.USER_TURN) {
-            statusText = 'Your turn ‼️';
+            statusText = 'Lượt của bạn ‼️';
         }
 
         this.#gameStatusSpan.innerText = statusText;
@@ -711,12 +711,12 @@ class PlayGamePage extends BasePage {
         if (this.#gameController.isGameFinished() && !this.#gameController.gameDto.isManchu) {
             this.#analyzeButtons.forEach((button) => {
                 button.classList.remove('app-buttons-disabled');
-                addToolTip(button, 'You can analyse the game with the Analysis Board tool');
+                addToolTip(button, 'Bạn có thể phân tích ván cờ bằng công cụ Bàn Phân Tích');
             });
         } else {
             const tooltip = this.#gameController.gameDto.isManchu
-                ? 'Analysis is not supported for Manchu variant games'
-                : 'Game must be finished before you can analyze it. If you want to analyze this game now, you have to resign first.';
+                ? 'Phân tích không được hỗ trợ cho ván cờ biến thể Manchu'
+                : 'Ván cờ phải kết thúc trước khi bạn có thể phân tích. Nếu bạn muốn phân tích ván cờ này ngay bây giờ, bạn phải đầu hàng trước.';
             this.#analyzeButtons.forEach((button) => {
                 button.classList.add('app-buttons-disabled');
                 addToolTip(button, tooltip);
@@ -885,43 +885,43 @@ class PlayGamePage extends BasePage {
     }
 
     #handleResignButtonClick() {
-        const text = buildSimpleSpan('Are you sure you want to resign?');
+        const text = buildSimpleSpan('Bạn có chắc muốn đầu hàng không?');
         const yesCallback = () => this.#gameController.resign();
-        const yesButtonText = 'resign';
+        const yesButtonText = 'đầu hàng';
         const noCallback = () => UI.hideModal(null)
-        const noButtonText = 'cancel';
+        const noButtonText = 'hủy';
         UI.showConfirmationModal(text, yesCallback, yesButtonText, noCallback, noButtonText);
     }
 
     #handleProposeDrawButtonClick() {
-        const text = buildSimpleSpan('Are you sure you want to ask for a draw?');
+        const text = buildSimpleSpan('Bạn có chắc muốn đề nghị hòa không?');
         const yesCallback = () => this.#gameController.proposeDraw();
-        const yesButtonText = 'draw';
+        const yesButtonText = 'hòa';
         const noCallback = () => UI.hideModal(null);
-        const noButtonText = 'cancel';
+        const noButtonText = 'hủy';
         UI.showConfirmationModal(text, yesCallback, yesButtonText, noCallback, noButtonText);
     }
 
     #handleCancelButtonClick() {
-        const text = buildSimpleSpan('Are you sure you want to cancel this game?');
+        const text = buildSimpleSpan('Bạn có chắc muốn hủy ván cờ này không?');
         const yesCallback = () => this.#gameController.cancel(() => {
             this.#updateBoardMaskMessage();
         });
-        const yesButtonText = 'yes';
+        const yesButtonText = 'có';
         const noCallback = () => UI.hideModal(null);
-        const noButtonText = 'no';
+        const noButtonText = 'không';
         UI.showConfirmationModal(text, yesCallback, yesButtonText, noCallback, noButtonText);
     }
 
     #handleDrawPropositionReceived() {
-        const text = buildSimpleSpan('Your opponent has proposed a draw. Do you accept?');
+        const text = buildSimpleSpan('Đối thủ đã đề nghị hòa. Bạn có chấp nhận không?');
         const yesCallback = () => this.#gameController.respondToDrawProposition(true);
-        const yesButtonText = 'accept draw';
+        const yesButtonText = 'chấp nhận hòa';
         const noCallback = () => {
             UI.hideModal(null);
             this.#gameController.respondToDrawProposition(false)
         };
-        const noButtonText = 'decline draw';
+        const noButtonText = 'từ chối hòa';
         UI.showConfirmationModal(text, yesCallback, yesButtonText, noCallback, noButtonText);
     }
 
