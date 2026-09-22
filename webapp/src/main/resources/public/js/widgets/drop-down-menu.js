@@ -201,33 +201,33 @@ class UserNameDropDownMenu extends DropDownMenu {
 
         switch (user.userType) {
             case UserType.AUTHENTICATED:
-                this.addSimpleItemWithHref('Profile', '/@/' + user.username);
-                this.addSimpleItemWithHref('Settings', '/user/settings');
-                this.addItemWithTopSeparatorAndHref('My Games', '/userdata/games');
-                this.addSimpleItemWithHref('My Bot Games', '/userdata/botgames');
-                this.addSimpleItemWithHref('My Puzzles', '/userdata/puzzles');
-                this.addSimpleItemWithHref('My Analysis', '/userdata/analysis');
-                this.addSimpleItemWithHref('My DB Searches', '/userdata/db-searches');
+                this.addSimpleItemWithHref('Hồ sơ', '/@/' + user.username);
+                this.addSimpleItemWithHref('Cài đặt', '/user/settings');
+                this.addItemWithTopSeparatorAndHref('Ván của tôi', '/userdata/games');
+                this.addSimpleItemWithHref('Ván với máy', '/userdata/botgames');
+                this.addSimpleItemWithHref('Cờ thế của tôi', '/userdata/puzzles');
+                this.addSimpleItemWithHref('Phân tích của tôi', '/userdata/analysis');
+                this.addSimpleItemWithHref('Tìm kiếm của tôi', '/userdata/db-searches');
                 if (user.isEditor) {
-                    this.addItemWithTopSeparatorAndHref('My Edits', '/userdata/db-edits');
+                    this.addItemWithTopSeparatorAndHref('Chỉnh sửa của tôi', '/userdata/db-edits');
                 }
                 if (user.isAdmin) {
-                    this.addItemWithTopSeparatorAndHref('Admin', '/admin');
+                    this.addItemWithTopSeparatorAndHref('Quản trị', '/admin');
                 }
-                this.addItem('Logout', ['drop-down-menu-item-top-separator', 'drop-down-menu-item-logout'], () => {
+                this.addItem('Đăng xuất', ['drop-down-menu-item-top-separator', 'drop-down-menu-item-logout'], () => {
                     eraseAllIdentificationCookies();
                     window.open('/', '_self');
                 });
                 break;
             case UserType.GUEST:
-                this.addSimpleItemWithHref('My Games', '/userdata/games');
-                this.addSimpleItemWithHref('My Bot Games', '/userdata/botgames');
-                this.addSimpleItemWithHref('My Puzzles', '/userdata/puzzles');
-                this.addSimpleItemWithHref('My DB Searches', '/userdata/db-searches');
-                this.addItem('Login', ['drop-down-menu-item-top-separator', 'drop-down-menu-item-authenticate'], () => {
+                this.addSimpleItemWithHref('Ván của tôi', '/userdata/games');
+                this.addSimpleItemWithHref('Ván với máy', '/userdata/botgames');
+                this.addSimpleItemWithHref('Cờ thế của tôi', '/userdata/puzzles');
+                this.addSimpleItemWithHref('Tìm kiếm của tôi', '/userdata/db-searches');
+                this.addItem('Đăng nhập', ['drop-down-menu-item-top-separator', 'drop-down-menu-item-authenticate'], () => {
                     showLoginModal();
                 });
-                this.addItem('Sign Up', ['drop-down-menu-item-authenticate'], () => {
+                this.addItem('Đăng ký', ['drop-down-menu-item-authenticate'], () => {
                     showSignUpModal();
                 });
                 break;
