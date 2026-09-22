@@ -88,7 +88,14 @@
             </table>
         </div>
         {{analysis_summary_report}}
-        {{latest_supporter_banner_desktop_info_box}}
+        <div class="info-box only-desktop">
+            <div class="center-content-div" style="margin-top: 12px; margin-bottom: 12px; font-weight: bold; font-size: 1.15em;">
+                Chơi Cùng Long
+            </div>
+            <div class="center-content-div" style="margin-bottom: 12px; font-size: 0.95em; opacity: 0.85;">
+                Chúc bạn có ván cờ vui vẻ!
+            </div>
+        </div>
         <div id="analysis-button-container-left-side">
             <input type="button" value="Phân tích" id="analyze-button-left-side"
                    class="app-buttons-bigger app-buttons-disabled"/>
@@ -101,7 +108,10 @@
         {{settings_info_box}}
         <div id="move-tree-container" class="move-tree-container"></div>
         <div id="move-history-navigation-panel" class="navigation-panel only-desktop"></div>
-        {{latest_supporter_banner_mobile_info_box}}
+        <div id="supporter-mobile-banner" class="info-box only-mobile" style="margin-top: 20px; padding: 24px; text-align: center;">
+            <div style="font-weight: bold; font-size: 1.15em;">Chơi Cùng Long</div>
+            <div style="margin-top: 6px; font-size: 0.95em; opacity: 0.85;">Chúc bạn có ván cờ vui vẻ!</div>
+        </div>
         <div id="analysis-button-container-right-side">
             <input type="button" value="Phân tích" id="analyze-button-right-side"
                    class="app-buttons-bigger app-buttons-disabled"/>
