@@ -19,12 +19,14 @@ class PlayerVsPlayerWebSocketSession(
 
     private var timeRemainingLastSync: Instant? = null
     private var drawPropositionUser: String? = null
+    private var takebackPropositionUser: String? = null
 
     fun currentIndex(): Int = moveIndex
 
     fun currentChatIndex(): Int = chatIndex
 
     fun currentStatus(): GameEventType = status
+    fun currentTakebackPropositionUser(): String? = takebackPropositionUser
 
     fun isWaitingToBeJoined() =
         status == GameEventType.CREATED
@@ -41,6 +43,19 @@ class PlayerVsPlayerWebSocketSession(
         if (update.status != null && update.status != status) {
             status = update.status
             drawPropositionUser = update.drawPropositionUser
+            takebackPropositionUser = update.takebackPropositionUser
+            mustUpdate = true
+        } else if (update.takebackPropositionUser != takebackPropositionUser ||
+            (update.takebackUpdate != null)
+        ) {
+            // takeback state changed without game status change
+            takebackPropositionUser = update.takebackPropositionUser
+            mustUpdate = true
+        }
+
+        // takeback accepted: index decreased
+        if (update.takebackUpdate != null) {
+            moveIndex = update.takebackUpdate.updatedIndex
             mustUpdate = true
         }
 

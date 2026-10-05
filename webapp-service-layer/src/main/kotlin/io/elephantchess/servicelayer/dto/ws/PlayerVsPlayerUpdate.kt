@@ -10,6 +10,8 @@ data class PlayerVsPlayerUpdate(
     val status: GameEventType? = null,
     val hasJoined: HasJoined? = null,
     val drawPropositionUser: String? = null,
+    val takebackPropositionUser: String? = null,
+    val takebackUpdate: TakebackUpdate? = null,
     val newMove: NewMove? = null,
     val ratingUpdate: RatingUpdate? = null,
     val timeRemaining: TimeRemaining? = null,
@@ -43,4 +45,9 @@ data class RatingUpdate(
     val inviterRatingTo: Int?,
     val inviteeRatingFrom: Int,
     val inviteeRatingTo: Int?,
+)
+
+data class TakebackUpdate(
+    val updatedIndex: Int,
+    val updatedFen: String,
 )

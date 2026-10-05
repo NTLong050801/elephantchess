@@ -15,7 +15,10 @@ enum class GameEventType {
     STALEMATED,
     OTHER_VICTORY,
     FLAGGED,
-    PERPETUAL_CHECKING;
+    PERPETUAL_CHECKING,
+    TAKEBACK_PROPOSED,
+    TAKEBACK_ACCEPTED,
+    TAKEBACK_DECLINED;
 
     fun isInProgress(): Boolean {
         return this in inProgressStatuses

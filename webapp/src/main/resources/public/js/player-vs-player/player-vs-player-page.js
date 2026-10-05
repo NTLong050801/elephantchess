@@ -60,6 +60,7 @@ class PlayGamePage extends BasePage {
     #gameActionsButtonsInfoBox = document.getElementById('game-actions-buttons-info-box');
     #resignButton = document.getElementById('resign-button');
     #proposeDrawButton = document.getElementById('propose-draw-button');
+    #proposeTakebackButton = document.getElementById('propose-takeback-button');
     #cancelButton = document.getElementById('cancel-button');
     #joinGameMaskButton = document.getElementById('join-game-mask-button');
 
@@ -194,6 +195,10 @@ class PlayGamePage extends BasePage {
                     }
                 },
                 () => this.#showGameFinishedModal(Modals.OPPONENT_DECLINED_DRAW),
+                () => this.#handleTakebackPropositionReceived(),
+                () => this.#handleTakebackAccepted(),
+                () => this.#handleTakebackDeclined(),
+                () => this.#handleTakebackCleared(),
                 () => this.#updateClocks(),
                 (moves) => {
                     this.#moveTreeWidget.setMoves(moves);
@@ -243,6 +248,12 @@ class PlayGamePage extends BasePage {
             this.#proposeDrawButton.addEventListener('click', (e) => {
                 if (isInfoBoxButtonEnabled(e)) {
                     this.#handleProposeDrawButtonClick();
+                }
+            });
+
+            this.#proposeTakebackButton.addEventListener('click', (e) => {
+                if (isInfoBoxButtonEnabled(e)) {
+                    this.#handleProposeTakebackButtonClick();
                 }
             });
 
@@ -702,6 +713,7 @@ class PlayGamePage extends BasePage {
             const isInProgress = this.#gameController.isGameInProgress();
             setInfoBoxButtonEnabled(this.#resignButton, isInProgress);
             setInfoBoxButtonEnabled(this.#proposeDrawButton, isInProgress);
+            setInfoBoxButtonEnabled(this.#proposeTakebackButton, this.#gameController.gameDto.canProposeTakeback());
             setInfoBoxButtonEnabled(this.#cancelButton, status === GameEventType.CREATED);
             this.#showGameActionButtonsBlock(true);
         } else {
@@ -923,6 +935,44 @@ class PlayGamePage extends BasePage {
         };
         const noButtonText = 'từ chối hòa';
         UI.showConfirmationModal(text, yesCallback, yesButtonText, noCallback, noButtonText);
+    }
+
+    #handleProposeTakebackButtonClick() {
+        const text = buildSimpleSpan('Bạn có chắc muốn xin đi lại nước trước của đối thủ không?');
+        const yesCallback = () => this.#gameController.proposeTakeback();
+        const yesButtonText = 'xin đi lại';
+        const noCallback = () => UI.hideModal(null);
+        const noButtonText = 'hủy';
+        UI.showConfirmationModal(text, yesCallback, yesButtonText, noCallback, noButtonText);
+    }
+
+    #handleTakebackPropositionReceived() {
+        const text = buildSimpleSpan('Đối thủ xin đi lại nước vừa rồi. Bạn có đồng ý cho đối thủ đi lại không?');
+        const yesCallback = () => this.#gameController.respondToTakeback(true);
+        const yesButtonText = 'đồng ý';
+        const noCallback = () => {
+            UI.hideModal(null);
+            this.#gameController.respondToTakeback(false);
+        };
+        const noButtonText = 'từ chối';
+        UI.showConfirmationModal(text, yesCallback, yesButtonText, noCallback, noButtonText);
+    }
+
+    #handleTakebackAccepted() {
+        UI.pushInfoNotification('Đối thủ đã đồng ý cho bạn đi lại. Hãy đi nước khác.', 4000);
+        this.#boardGui.loadFen(this.#gameController.fen);
+        this.#updateGui();
+        this.#updateClocks();
+    }
+
+    #handleTakebackDeclined() {
+        UI.pushInfoNotification('Đối thủ đã từ chối yêu cầu xin đi lại.', 3000);
+        this.#updateGui();
+    }
+
+    #handleTakebackCleared() {
+        // auto-cleared because opponent played a move
+        this.#updateGui();
     }
 
     /**

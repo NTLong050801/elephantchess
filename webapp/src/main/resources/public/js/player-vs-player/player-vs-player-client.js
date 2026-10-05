@@ -124,6 +124,18 @@ class GameClient {
         postAndHandle(url, body, () => cb());
     }
 
+    postProposeTakeback(cb) {
+        const url = `${GAME_API}/propose-takeback`;
+        const body = {'gameId': this.#gameId};
+        postAndHandle(url, body, () => cb());
+    }
+
+    postRespondToTakeback(accept, cb) {
+        const url = `${GAME_API}/respond-to-takeback`;
+        const body = {'gameId': this.#gameId, 'accept': accept};
+        postAndHandle(url, body, () => cb());
+    }
+
     /**
      * @param move {HalfMove}
      * @param cb {function(PlayMoveResponse)}

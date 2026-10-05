@@ -1,22 +1,3 @@
-/*
- * Copyright (C) 2026  Encelade SRL
- * Copyright (C) 2026  elephantchess.io
- * Copyright (C) 2026  Benoît Vleminckx (benckx)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- */
-
 const WARNING_TIME_OUT = 4_000;
 
 /**
@@ -76,6 +57,10 @@ class GameController {
     #drawReceivedCallback = () => console.log('received draw');
     #drawAcceptedCallback = () => console.log('draw accepted');
     #drawDeclinedCallback = () => console.log('draw declined');
+    #takebackReceivedCallback = () => console.log('received takeback');
+    #takebackAcceptedCallback = () => console.log('takeback accepted');
+    #takebackDeclinedCallback = () => console.log('takeback declined');
+    #takebackClearedCallback = () => console.log('takeback cleared');
     #updateClocksCallback = () => console.log('update clocks');
     #fetchMovesCallback = (moves) => console.log('fetch moves ' + moves);
     #receivedChatMessages = (chatMessages, acks) => console.log('received chat messages ' + chatMessages);
@@ -94,6 +79,10 @@ class GameController {
      * @param drawReceivedCallback {function()}
      * @param drawAcceptedCallback {function()}
      * @param drawDeclinedCallback {function()}
+     * @param takebackReceivedCallback {function()}
+     * @param takebackAcceptedCallback {function()}
+     * @param takebackDeclinedCallback {function()}
+     * @param takebackClearedCallback {function()}
      * @param updateClocksCallback {function()}
      * @param fetchMovesCallback {function(HalfMove[])}
      * @param receivedChatMessages {function(ChatMessageDto[], number[])}
@@ -112,6 +101,10 @@ class GameController {
         drawReceivedCallback,
         drawAcceptedCallback,
         drawDeclinedCallback,
+        takebackReceivedCallback,
+        takebackAcceptedCallback,
+        takebackDeclinedCallback,
+        takebackClearedCallback,
         updateClocksCallback,
         fetchMovesCallback,
         receivedChatMessages,
@@ -129,6 +122,10 @@ class GameController {
         this.#drawReceivedCallback = drawReceivedCallback;
         this.#drawAcceptedCallback = drawAcceptedCallback;
         this.#drawDeclinedCallback = drawDeclinedCallback;
+        this.#takebackReceivedCallback = takebackReceivedCallback || (() => {});
+        this.#takebackAcceptedCallback = takebackAcceptedCallback || (() => {});
+        this.#takebackDeclinedCallback = takebackDeclinedCallback || (() => {});
+        this.#takebackClearedCallback = takebackClearedCallback || (() => {});
         this.#updateClocksCallback = updateClocksCallback;
         this.#fetchMovesCallback = fetchMovesCallback;
         this.#receivedChatMessages = receivedChatMessages;
@@ -140,9 +137,11 @@ class GameController {
             connectToWs();
             if (!this.isGameFinished()) {
                 if (this.isGameInProgress()) {
-                    // if draw has been proposed to user, reload the pop-up on page refresh
                     if (this.#gameDto.hasReceiveDrawProposition()) {
                         this.#drawReceivedCallback();
+                    }
+                    if (this.#gameDto.hasReceivedTakebackProposition()) {
+                        this.#takebackReceivedCallback();
                     }
                 }
                 this.#startUpdateClocks();
@@ -230,7 +229,6 @@ class GameController {
                                 break;
                             case GameEventType.DRAW_PROPOSED:
                                 const isPlayer = dto.userStatus !== UserStatus.SPECTATOR;
-                                // TODO: should isPlayer be moved to page logic?
                                 if (!isWaitingForDrawResponse && isPlayer) {
                                     this.#gameDto.updateForDrawPropositionReceived(json.drawPropositionUser);
                                     this.#drawReceivedCallback();
@@ -250,6 +248,45 @@ class GameController {
                                 break;
                         }
                     }
+                    // takeback proposition (independent of status)
+                    const prevTakebackUser = dto.takebackPropositionUser;
+                    const newTakebackUser = json.takebackPropositionUser !== undefined ? json.takebackPropositionUser : prevTakebackUser;
+                    if (newTakebackUser !== prevTakebackUser) {
+                        if (newTakebackUser != null && dto.userStatus !== UserStatus.SPECTATOR) {
+                            if (newTakebackUser !== new User().userId) {
+                                dto.updateForTakebackProposed(newTakebackUser);
+                                this.#takebackReceivedCallback();
+                            } else {
+                                dto.updateForTakebackProposed(newTakebackUser);
+                            }
+                        } else if (newTakebackUser == null && prevTakebackUser != null) {
+                            // cleared (declined or auto-cleared)
+                            const wasWaiting = dto.isWaitingForTakebackResponse();
+                            dto.clearTakebackProposition();
+                            if (!wasWaiting && dto.userStatus !== UserStatus.SPECTATOR) {
+                                // we were the receiver and it was cleared without explicit accept => declined/auto
+                                // only notify if we had received it
+                            } else if (wasWaiting) {
+                                this.#takebackDeclinedCallback();
+                            } else {
+                                this.#takebackClearedCallback();
+                            }
+                        }
+                    }
+                    // takeback accepted: index decreased
+                    if (json.takebackUpdate != null) {
+                        const tu = json.takebackUpdate;
+                        dto.updateForTakebackAccepted(tu.updatedFen, tu.updatedIndex);
+                        // refresh move history from server
+                        this.#client.getMovesHistory((moves, moveTimestamps, joinTime) => {
+                            this.#moveTimestamps = moveTimestamps;
+                            this.#joinTime = joinTime;
+                            this.#fetchMovesCallback(moves);
+                        });
+                        this.#updateGameState(true);
+                        this.#updateClocksCallback();
+                        this.#takebackAcceptedCallback();
+                    }
                     if (json.hasJoined != null) {
                         const hasJoinedStatus = new HasJoinedStatusDto(json.hasJoined);
                         this.#gameDto.updateOpponentHasJoined(hasJoinedStatus);
@@ -260,12 +297,6 @@ class GameController {
                         if (this.#gameDto.moveIndex + 1 === newMoveDto.updatedIndex) {
                             this.#handleOpponentMove(newMoveDto, ratingUpdate);
                         } else if (this.#gameDto.moveIndex !== newMoveDto.updatedIndex) {
-                            // if this.#gameDto.moveIndex === newMoveDto.updatedIndex,
-                            // player receives their own move, don't need to do anything
-                            // but otherwise, it means the game state is incorrect
-
-                            // TODO: should add check that given the index the move comes indeed from the opponent?
-                            //  quick fix here is too reload, would be nice to know how often it happens
                             window.location.reload();
                         }
 
@@ -284,28 +315,18 @@ class GameController {
                 }
             });
 
-            // expose the current socket so sendChat() can write to it
             this.#webSocket = handle.getSocket();
         };
     }
 
-    /**
-     * @return {string}
-     */
     get gameId() {
         return this.#gameId;
     }
 
-    /**
-     * @return {GameDto}
-     */
     get gameDto() {
         return this.#gameDto;
     }
 
-    /**
-     * @returns {string}
-     */
     get gameState() {
         return this.#gameState;
     }
@@ -314,14 +335,6 @@ class GameController {
         return this.#gameDto.fen;
     }
 
-    /**
-     * Wall-clock timestamp (epoch millis) for the move at the given 0-based index
-     * in the main line of the game. Returns null if timestamps are not available
-     * or the index is out of range.
-     *
-     * @param moveIndex {number}
-     * @return {number|null}
-     */
     getMoveTimestampAt(moveIndex) {
         if (this.#moveTimestamps == null) {
             return null;
@@ -332,17 +345,6 @@ class GameController {
         return this.#moveTimestamps[moveIndex];
     }
 
-    /**
-     * Compute the {@link TimeControlClock} state right after the move at the given
-     * 0-based main-line index has been played. Returns null if the data needed
-     * to reconstruct the historical clock is not available (e.g. unrated game with
-     * no time control, missing timestamps, index out of range).
-     *
-     * Mirrors the server-side logic in PlayerVsPlayerGameService#calculateTimeRemaining.
-     *
-     * @param moveIndex {number}
-     * @return {TimeControlClock|null}
-     */
     getClockAtMoveIndex(moveIndex) {
         if (!this.#gameDto || !this.#gameDto.hasTimeControl()) {
             return null;
@@ -359,13 +361,9 @@ class GameController {
         const incrementMs = timeControl.increment != null ? timeControl.increment.toMillis() : 0;
 
         if (this.#gameDto.timeControlMode === TimeControlMode.MOVE_TIME) {
-            // In MOVE_TIME the per-move timer resets to base for the player about to play,
-            // and the player who just moved is no longer counting down, so the displayed
-            // clock right after any move is (base, base).
             return new TimeControlClock(baseMs, baseMs);
         }
 
-        // GAME_TIME
         let redMs = baseMs;
         let blackMs = baseMs;
         let prev = this.#joinTime;
@@ -386,30 +384,18 @@ class GameController {
         return new TimeControlClock(redMs, blackMs);
     }
 
-    /**
-     * @return {Map<string, string>}
-     */
     buildPgnMetadata() {
         return this.#gameDto.buildPgnMetadata();
     }
 
-    /**
-     * @returns {boolean}
-     */
     isGameInProgress() {
         return isStatusInProgress(this.#gameDto.status);
     }
 
-    /**
-     * @returns {boolean}
-     */
     isGameFinished() {
         return isStatusFinished(this.#gameDto.status);
     }
 
-    /**
-     * @return {UserRatingUpdate|null}
-     */
     get userRatingUpdate() {
         if (this.#gameDto != null && this.#gameDto.hasRatingUpdate && this.#gameDto.ratingUpdate.isRated) {
             let ratingUpdate = this.#gameDto.ratingUpdate;
@@ -424,13 +410,8 @@ class GameController {
         }
     }
 
-    /**
-     * @param source {string|null}
-     * @param sourceId {string|null}
-     */
     join(source, sourceId) {
         if (this.#gameDto.status === GameEventType.CREATED && isUserIdentified()) {
-            // TODO: what if game already join -> handle error
             this.#client.postJoin(source, sourceId, (color, rating) => {
                 this.#gameDto.updateUserHasJoined(new User(), color, rating);
                 this.#updateGameState();
@@ -440,10 +421,6 @@ class GameController {
         }
     }
 
-    /**
-     * @param cb {function()} When the call has been completed, this callback is called. Allows to update UI.
-     */
-    // TODO: maybe the same cb pattern should be used with other methods instead of calling stateUpdateCallback, which is a bit vague
     cancel(cb) {
         if (this.#gameDto.status === GameEventType.CREATED && isUserIdentified()) {
             this.#client.postCancel(() => {
@@ -479,9 +456,6 @@ class GameController {
         }
     }
 
-    /**
-     * @param accept {boolean}
-     */
     respondToDrawProposition(accept) {
         if (!this.isGameFinished()) {
             this.#client.postRespondToDraw(accept, () => {
@@ -493,10 +467,31 @@ class GameController {
         }
     }
 
-    /**
-     * @param move {HalfMove}
-     * @param okCb {function()} Called if move was successfully registered
-     */
+    proposeTakeback() {
+        if (!this.isGameFinished() && this.#gameDto.canProposeTakeback()) {
+            this.#client.postProposeTakeback(() => {
+                this.#gameDto.updateForTakebackProposed(new User().userId);
+                UI.pushNotification('Đã gửi yêu cầu xin đi lại, chờ đối thủ phản hồi...', 3000);
+            });
+        } else {
+            UI.pushErrorNotification('Không thể xin đi lại lúc này', WARNING_TIME_OUT);
+        }
+    }
+
+    respondToTakeback(accept) {
+        if (!this.isGameFinished()) {
+            this.#client.postRespondToTakeback(accept, () => {
+                if (accept) {
+                    // server will push takebackUpdate via WS; optimistic clear
+                } else {
+                    this.#gameDto.clearTakebackProposition();
+                }
+            });
+        } else {
+            console.warn('game finished');
+        }
+    }
+
     registerPlayerMove(move, okCb) {
         if (!this.isGameFinished()) {
             this.#client.postMove(move, (playMoveResponse) => {
@@ -515,9 +510,6 @@ class GameController {
         }
     }
 
-    /**
-     * @param message {string}
-     */
     sendChat(message) {
         if (this.#webSocket != null) {
             this.#webSocket.send(JSON.stringify({"message": message}));
@@ -530,17 +522,10 @@ class GameController {
         }
     }
 
-    /**
-     * @param userId {string|null}
-     */
     isAllowedToSendChat(userId) {
         return (userId != null && this.#gameDto.status === GameEventType.CREATED) || this.#gameDto.isUserPlaying();
     }
 
-    /**
-     * @param newMoveDto {NewMoveDto}
-     * @param ratingUpdate {RatingUpdateDto|null}
-     */
     #handleOpponentMove(newMoveDto, ratingUpdate) {
         this.#gameDto.updateForOpponentMove(newMoveDto, ratingUpdate);
         this.#updateGameState();
@@ -554,17 +539,11 @@ class GameController {
         }
     }
 
-    /**
-     * @param gameDto {GameDto}
-     */
     #updateGameDto(gameDto) {
         this.#gameDto = gameDto;
         this.#updateGameState();
     }
 
-    /**
-     * @param forceCallback {boolean}. Normally the UI callback is only called on state changes. This flag forces UI callback.
-     */
     #updateGameState(forceCallback = false) {
         const before = this.#gameState;
 
@@ -584,7 +563,6 @@ class GameController {
         }
     }
 
-    // TODO: add increment when there is a move
     #startUpdateClocks() {
         if (this.#gameDto.hasTimeControl()) {
             this.#updateClockTimerId = setIntervalNoDelay(() => {
@@ -598,19 +576,14 @@ class GameController {
         clearInterval(this.#updateClockTimerId);
     }
 
-    /**
-     * @param ratingUpdate {RatingUpdateDto|null}
-     */
     #handleFlagged(ratingUpdate) {
         this.#stopUpdateClocks();
         const clock = this.#gameDto.timeControlClock;
         const redMillis = clock.red.toMillis();
         const blackMillis = clock.black.toMillis();
         if (redMillis < blackMillis) {
-            // black wins
             this.#updateForFlagged(Color.BLACK, ratingUpdate);
         } else if (redMillis > blackMillis) {
-            // red wins
             this.#updateForFlagged(Color.RED, ratingUpdate);
         } else {
             console.warn('equal remaining counter, case not handled');
@@ -629,15 +602,10 @@ class GameController {
                 this.#lossCallback();
             }
         } else {
-            // TODO: it's a workaround for now
-            //  we would need to call a service to know which color flagged
             window.location.reload();
         }
     }
 
-    /**
-     * @param ratingUpdate {RatingUpdateDto|null}
-     */
     #handleResignationReceived(ratingUpdate) {
         this.#stopUpdateClocks();
         if (this.#gameDto.userStatus !== UserStatus.SPECTATOR) {
@@ -645,15 +613,10 @@ class GameController {
             this.#gameDto.updateForResignationReceived(opponentColor, ratingUpdate);
             this.#resignReceivedCallback();
         } else {
-            // TODO: it's a workaround for now
-            //  we would need to call a service to know which color resigned
             window.location.reload();
         }
     }
 
-    /**
-     * @param ratingUpdate {RatingUpdateDto|null}
-     */
     #handlePerpetualCheckingReceived(ratingUpdate) {
         this.#stopUpdateClocks();
         if (this.#gameDto.userStatus !== UserStatus.SPECTATOR) {
@@ -661,15 +624,10 @@ class GameController {
             this.#gameDto.updateForPerpetualCheckingReceived(opponentColor, ratingUpdate);
             this.#winCallback();
         } else {
-            // TODO: it's a workaround for now
-            //  we would need to call a service to know which color got perpetual checks
             window.location.reload();
         }
     }
 
-    /**
-     * @param chatMessages {ChatMessageDto[]}
-     */
     #handleReceivedChatMessages(chatMessages) {
         const userId = new User().userId;
         if (userId != null && chatMessages.length > 0) {

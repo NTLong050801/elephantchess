@@ -181,6 +181,7 @@ class PlayerVsPlayerGameService(
         val moveCache = mutableMapOf<String, CachedValue<NewMove?>>()
         val timeRemainingCache = mutableMapOf<String, CachedValue<TimeRemaining?>>()
         val drawPropositionUserCache = mutableMapOf<String, CachedValue<String?>>()
+        val takebackPropositionUserCache = mutableMapOf<String, CachedValue<String?>>()
 
         playerVsPlayerSessions
             .forEach { session ->
@@ -227,6 +228,16 @@ class PlayerVsPlayerGameService(
                     }
                 }
 
+                // takeback: detect proposition change and accepted (index decreased)
+                val serverTakebackUser = takebackPropositionUserCache.cachedGetOrPut(gameId) {
+                    pvpGameDaoService.fetchTakebackPropositionUser(gameId)
+                }
+                val takebackUserChanged = serverTakebackUser != session.currentTakebackPropositionUser()
+                var takebackUpdate: TakebackUpdate? = null
+                if (session.currentIndex() > index) {
+                    takebackUpdate = TakebackUpdate(updatedIndex = index, updatedFen = gameState.fen)
+                }
+
                 // time remaining
                 var timeRemaining: TimeRemaining? = null
                 if (session.mustSyncTime(now)) {
@@ -265,7 +276,9 @@ class PlayerVsPlayerGameService(
                             hasJoinedEvent != null ||
                             timeRemaining != null ||
                             chatMessages.isNotEmpty() ||
-                            typingUsers.isNotEmpty()
+                            typingUsers.isNotEmpty() ||
+                            takebackUserChanged ||
+                            takebackUpdate != null
 
                 // update session
                 if (shouldUpdate) {
@@ -281,6 +294,8 @@ class PlayerVsPlayerGameService(
                             status = status,
                             hasJoined = hasJoinedEvent,
                             drawPropositionUser = drawPropositionUser,
+                            takebackPropositionUser = serverTakebackUser,
+                            takebackUpdate = takebackUpdate,
                             newMove = newMove,
                             ratingUpdate = fetchRatingUpdateIfNecessaryWs(session.gameId, status),
                             timeRemaining = timeRemaining,
@@ -687,6 +702,7 @@ class PlayerVsPlayerGameService(
             gameEventType = gameRecord.gameStatus,
             outcome = gameRecord.outcome,
             drawPropositionUser = gameRecord.drawPropositionUser,
+            takebackPropositionUser = pvpGameDaoService.fetchTakebackPropositionUser(gameId),
             variant = gameRecord.variant,
         )
     }
@@ -990,6 +1006,48 @@ class PlayerVsPlayerGameService(
                         gameId = gameId
                     )
                 }
+        }
+    }
+
+    suspend fun proposeTakeback(userId: String, request: ProposeTakebackRequest) {
+        val gameId = request.gameId
+        val gamePlayersStatus = fetchPlayersAndStatus(gameId)
+        if (!gamePlayersStatus.isPlaying(userId)) {
+            throw ForbiddenException("$userId can not update game $gameId")
+        } else if (!gamePlayersStatus.isGameInProgress()) {
+            throw BadRequestException("Can not propose takeback in game $gameId in status ${gamePlayersStatus.status}")
+        }
+        val gameRecord = pvpGameDaoService.fetchById(gameId) ?: throw NotFoundException("Game $gameId not found")
+        if (gameRecord.currentHalfMoveIndex <= 0) {
+            throw BadRequestException("No moves to take back")
+        }
+        val existing = pvpGameDaoService.fetchTakebackPropositionUser(gameId)
+        if (existing != null) {
+            throw BadRequestException("Takeback already proposed")
+        }
+        val userColor = gameRecord.userColor(userId)
+        val colorToPlay = gameRecord.colorToPlay()
+        if (userColor != colorToPlay) {
+            throw BadRequestException("It is $colorToPlay turn, only that player can request takeback")
+        }
+        pvpGameDaoService.proposeTakeback(userId, gameId)
+    }
+
+    suspend fun respondToTakeback(userId: String, request: RespondToTakebackRequest) {
+        val gameId = request.gameId
+        val gamePlayersStatus = fetchPlayersAndStatus(gameId)
+        if (!gamePlayersStatus.isPlaying(userId)) {
+            throw ForbiddenException("$userId can not update game $gameId")
+        }
+        val proposer = pvpGameDaoService.fetchTakebackPropositionUser(gameId)
+            ?: throw BadRequestException("No takeback to respond to in game $gameId")
+        if (proposer == userId) {
+            throw BadRequestException("You can not respond to your own takeback request")
+        }
+        if (request.accept) {
+            pvpGameDaoService.acceptTakeback(gameId, userId)
+        } else {
+            pvpGameDaoService.clearTakebackProposition(gameId, declinedByUserId = userId)
         }
     }
 

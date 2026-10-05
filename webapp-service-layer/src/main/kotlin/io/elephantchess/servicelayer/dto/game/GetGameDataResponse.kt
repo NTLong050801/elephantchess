@@ -30,5 +30,6 @@ data class GetGameDataResponse(
     val outcome: Outcome?,
     val ratingUpdate: RatingUpdate?,
     val drawPropositionUser: String?,
+    val takebackPropositionUser: String?,
     val variant: Variant
 )

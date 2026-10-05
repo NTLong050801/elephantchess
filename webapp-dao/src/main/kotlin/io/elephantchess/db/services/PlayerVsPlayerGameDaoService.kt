@@ -583,6 +583,114 @@ class PlayerVsPlayerGameDaoService(private val dslContext: DSLContext) {
             .awaitSingleValue()
     }
 
+    // Takeback: use plain SQL field to avoid requiring JOOQ codegen for new column before it is generated
+    private val takebackField = DSL.field("takeback_proposition_user", String::class.java)
+
+    suspend fun fetchTakebackPropositionUser(gameId: String): String? {
+        return dslContext
+            .select(takebackField)
+            .from(GAME)
+            .where(GAME.ID.eq(gameId))
+            .awaitSingleValue()
+    }
+
+    suspend fun proposeTakeback(userId: String, gameId: String) {
+        dslContext.transactionCoroutine { cfg ->
+            val now = Clock.System.now()
+            DSL.using(cfg)
+                .update(GAME)
+                .set(takebackField, userId)
+                .set(GAME.LAST_UPDATED.fixed(), now)
+                .where(GAME.ID.eq(gameId))
+                .awaitExecute()
+            val event = GameStatusEvent()
+            event.gameId = gameId
+            event.eventType = GameEventType.TAKEBACK_PROPOSED
+            event.userId = userId
+            event.eventTime = now
+            GameStatusEventDao(cfg).insertReactive(event)
+        }
+    }
+
+    suspend fun clearTakebackProposition(gameId: String, declinedByUserId: String? = null) {
+        dslContext.transactionCoroutine { cfg ->
+            val now = Clock.System.now()
+            DSL.using(cfg)
+                .update(GAME)
+                .setNull(takebackField)
+                .set(GAME.LAST_UPDATED.fixed(), now)
+                .where(GAME.ID.eq(gameId))
+                .awaitExecute()
+            if (declinedByUserId != null) {
+                val event = GameStatusEvent()
+                event.gameId = gameId
+                event.eventType = GameEventType.TAKEBACK_DECLINED
+                event.userId = declinedByUserId
+                event.eventTime = now
+                GameStatusEventDao(cfg).insertReactive(event)
+            }
+        }
+    }
+
+    data class TakebackResult(val newFen: String, val newIndex: Int)
+
+    suspend fun acceptTakeback(gameId: String, accepterUserId: String): TakebackResult {
+        return dslContext.transactionCoroutine { cfg ->
+            val transactional = DSL.using(cfg)
+            val gameRecord = transactional
+                .select()
+                .from(GAME)
+                .where(GAME.ID.eq(gameId))
+                .awaitMappedRecords<Game>()
+                .firstOrNull() ?: throw IllegalStateException("Game $gameId not found")
+
+            val currentIndex = gameRecord.currentHalfMoveIndex
+            if (currentIndex <= 0) throw IllegalStateException("No moves to take back")
+
+            val lastPosition = currentIndex - 1
+            // delete last move
+            transactional
+                .deleteFrom(GAME_MOVE)
+                .where(GAME_MOVE.GAME_ID.eq(gameId))
+                .and(GAME_MOVE.POSITION.eq(lastPosition))
+                .awaitExecute()
+
+            // recompute FEN from remaining moves
+            val remainingMoves = transactional
+                .select(GAME_MOVE.UCI)
+                .from(GAME_MOVE)
+                .where(GAME_MOVE.GAME_ID.eq(gameId))
+                .orderBy(GAME_MOVE.POSITION)
+                .awaitMappedRecords<String>()
+
+            val variant = gameRecord.variant ?: Variant.XIANGQI
+            val startFen = io.elephantchess.xiangqi.Board.defaultStartFen(variant)
+            val board = io.elephantchess.xiangqi.Board(startFen)
+            remainingMoves.forEach { uci -> board.registerMove(uci) }
+            val newFen = board.outputFen()
+            val newIndex = remainingMoves.size
+            val now = Clock.System.now()
+
+            transactional
+                .update(GAME)
+                .set(GAME.CURRENT_FEN.fixed(), newFen)
+                .set(GAME.CURRENT_HALF_MOVE_INDEX.fixed(), newIndex)
+                .setNull(takebackField)
+                .set(GAME.LAST_UPDATED.fixed(), now)
+                .where(GAME.ID.eq(gameId))
+                .awaitExecute()
+
+            val event = GameStatusEvent()
+            event.gameId = gameId
+            event.eventType = GameEventType.TAKEBACK_ACCEPTED
+            event.userId = accepterUserId
+            event.eventTime = now
+            GameStatusEventDao(cfg).insertReactive(event)
+
+            TakebackResult(newFen, newIndex)
+        }
+    }
+
     suspend fun fetchPlayersAndStatus(gameId: String): GamePlayersStatus? {
         return dslContext
             .select(
@@ -934,11 +1042,12 @@ class PlayerVsPlayerGameDaoService(private val dslContext: DSLContext) {
                         }
                     }
 
-                    // update game record
+                    // update game record — also auto-clear pending takeback (playing a move = decline)
                     transactional
                         .update(GAME)
                         .set(GAME.CURRENT_FEN.fixed(), playMoveResult.newFen)
                         .set(GAME.CURRENT_HALF_MOVE_INDEX.fixed(), playMoveResult.newPosition)
+                        .setNull(takebackField)
                         .set(GAME.LAST_UPDATED.fixed(), now)
                         .where(GAME.ID.eq(gameId))
                         .awaitExecute()

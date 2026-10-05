@@ -76,6 +76,16 @@ fun Route.pvpGameRoutes() {
                 pvpGameService.playMove(verifiedToken.userId, request)
             }
         }
+        post("/propose-takeback") {
+            requireIdentificationWithBody<ProposeTakebackRequest> { verifiedToken, request ->
+                pvpGameService.proposeTakeback(verifiedToken.userId, request)
+            }
+        }
+        post("/respond-to-takeback") {
+            requireIdentificationWithBody<RespondToTakebackRequest> { verifiedToken, request ->
+                pvpGameService.respondToTakeback(verifiedToken.userId, request)
+            }
+        }
     }
 }
 

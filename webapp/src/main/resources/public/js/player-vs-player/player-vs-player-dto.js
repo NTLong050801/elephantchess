@@ -170,6 +170,7 @@ class GameDto {
     #gameEventType = null;
     #outcome = null;
     #drawPropositionUser = null;
+    #takebackPropositionUser = null;
     #ratingUpdate = null;
     #variant;
 
@@ -202,6 +203,7 @@ class GameDto {
             this.#ratingUpdate = new RatingUpdateDto(json.ratingUpdate);
         }
         this.#drawPropositionUser = json.drawPropositionUser;
+        this.#takebackPropositionUser = json.takebackPropositionUser ?? null;
         this.#variant = json.variant ?? Variant.XIANGQI;
     }
 
@@ -775,6 +777,47 @@ class GameDto {
         if (ratingUpdate != null) {
             this.#ratingUpdate = ratingUpdate;
         }
+    }
+
+    // ---- Takeback ----
+    get takebackPropositionUser() {
+        return this.#takebackPropositionUser;
+    }
+
+    hasReceivedTakebackProposition() {
+        return this.#takebackPropositionUser != null
+            && this.#takebackPropositionUser !== this.#userId
+            && this.isUserPlaying();
+    }
+
+    isWaitingForTakebackResponse() {
+        return this.#takebackPropositionUser === this.#userId;
+    }
+
+    canProposeTakeback() {
+        return this.isUserPlaying()
+            && isStatusInProgress(this.#gameEventType)
+            && this.#moveIndex > 0
+            && this.#takebackPropositionUser == null
+            && this.isUserTurn();
+    }
+
+    updateForTakebackProposed(user) {
+        this.#takebackPropositionUser = user;
+    }
+
+    clearTakebackProposition() {
+        this.#takebackPropositionUser = null;
+    }
+
+    /**
+     * @param fen {string}
+     * @param moveIndex {number}
+     */
+    updateForTakebackAccepted(fen, moveIndex) {
+        this.#fen = fen;
+        this.#moveIndex = moveIndex;
+        this.#takebackPropositionUser = null;
     }
 
     hasBeenJoined() {
