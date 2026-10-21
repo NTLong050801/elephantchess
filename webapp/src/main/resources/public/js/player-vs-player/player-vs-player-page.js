@@ -76,6 +76,10 @@ class PlayGamePage extends BasePage {
 
     #voiceCallButton = document.getElementById('voice-call-button');
     #voiceCallStatus = document.getElementById('voice-call-status');
+    #voiceCallMicRow = document.getElementById('voice-call-mic-row');
+    #voiceCallMicButton = document.getElementById('voice-call-mic-button');
+    #voiceCallMicIcon = document.getElementById('voice-call-mic-icon');
+    #voiceCallMicStatus = document.getElementById('voice-call-mic-status');
 
     #analyzeButtons = [
         document.getElementById('analyze-button-left-side'),
@@ -336,12 +340,16 @@ class PlayGamePage extends BasePage {
         this.#voiceCallManager.onIncomingCall(() => this.#handleIncomingVoiceCall());
         this.#voiceCallManager.onCallEnded(() => UI.pushInfoNotification('Cuộc gọi thoại đã kết thúc.'));
         this.#voiceCallManager.onError((msg) => UI.pushErrorNotification(msg, 4_000));
+        this.#voiceCallManager.onRemoteMicChange((muted) => this.#renderRemoteMic(muted));
         if (this.#voiceCallButton != null) {
             this.#voiceCallButton.addEventListener('click', (e) => {
                 if (isInfoBoxButtonEnabled(e)) {
                     this.#handleVoiceCallButtonClick();
                 }
             });
+        }
+        if (this.#voiceCallMicButton != null) {
+            this.#voiceCallMicButton.addEventListener('click', () => this.#handleMicButtonClick());
         }
     }
 
@@ -1065,6 +1073,50 @@ class PlayGamePage extends BasePage {
         UI.showConfirmationModal(text, yesCallback, yesButtonText, noCallback, noButtonText);
     }
 
+    #handleMicButtonClick() {
+        if (this.#voiceCallManager == null) {
+            return;
+        }
+        const muted = this.#voiceCallManager.toggleMute();
+        this.#renderLocalMic(muted);
+    }
+
+    /**
+     * @param muted {boolean} true if my microphone is now muted
+     */
+    #renderLocalMic(muted) {
+        if (this.#voiceCallMicButton != null) {
+            this.#voiceCallMicButton.value = muted ? 'Bật mic' : 'Tắt mic';
+        }
+        if (this.#voiceCallMicIcon != null) {
+            this.#voiceCallMicIcon.textContent = muted ? 'Mic tắt' : 'Mic';
+        }
+    }
+
+    /**
+     * @param muted {boolean} true if the opponent muted their microphone
+     */
+    #renderRemoteMic(muted) {
+        if (this.#voiceCallMicStatus != null) {
+            this.#voiceCallMicStatus.textContent = muted ? 'Đối thủ đã tắt mic' : '';
+        }
+    }
+
+    /**
+     * Shows the mic row only while the local microphone is active
+     * (calling or in call); resets mic labels when hidden.
+     * @param visible {boolean}
+     */
+    #setMicRowVisible(visible) {
+        if (this.#voiceCallMicRow != null) {
+            this.#voiceCallMicRow.style.display = visible ? '' : 'none';
+        }
+        if (!visible) {
+            this.#renderLocalMic(false);
+            this.#renderRemoteMic(false);
+        }
+    }
+
     /**
      * @param state {string}
      */
@@ -1090,6 +1142,7 @@ class PlayGamePage extends BasePage {
                     statusEl.textContent = '';
                 }
                 setInfoBoxButtonEnabled(this.#voiceCallButton, canCall);
+                this.#setMicRowVisible(false);
                 break;
             case VoiceCallState.CALLING:
                 if (labelCell != null) {
@@ -1099,6 +1152,7 @@ class PlayGamePage extends BasePage {
                     statusEl.textContent = 'Đang gọi...';
                 }
                 setInfoBoxButtonEnabled(this.#voiceCallButton, true);
+                this.#setMicRowVisible(true);
                 break;
             case VoiceCallState.RINGING:
                 if (labelCell != null) {
@@ -1108,6 +1162,7 @@ class PlayGamePage extends BasePage {
                     statusEl.textContent = 'Có cuộc gọi đến...';
                 }
                 setInfoBoxButtonEnabled(this.#voiceCallButton, true);
+                this.#setMicRowVisible(false);
                 break;
             case VoiceCallState.IN_CALL:
                 if (labelCell != null) {
@@ -1117,6 +1172,7 @@ class PlayGamePage extends BasePage {
                     statusEl.textContent = 'Đang trong cuộc gọi';
                 }
                 setInfoBoxButtonEnabled(this.#voiceCallButton, true);
+                this.#setMicRowVisible(true);
                 break;
         }
     }

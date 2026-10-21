@@ -19,4 +19,6 @@ enum class CallSignalType {
     ICE_CANDIDATE,
     CALL_REJECT,
     CALL_END,
+    MIC_MUTED,
+    MIC_UNMUTED,
 }

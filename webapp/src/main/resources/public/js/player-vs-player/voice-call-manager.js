@@ -62,6 +62,7 @@ class VoiceCallManager {
     #onIncomingCall = () => console.log('incoming voice call');
     #onCallEnded = () => console.log('voice call ended');
     #onError = (msg) => console.log('voice call error: ' + msg);
+    #onRemoteMicChange = (muted) => console.log('remote mic muted: ' + muted);
 
     /**
      * @param sendSignal {function(string, string|null): void}
@@ -96,6 +97,10 @@ class VoiceCallManager {
 
     onError(cb) {
         this.#onError = cb;
+    }
+
+    onRemoteMicChange(cb) {
+        this.#onRemoteMicChange = cb;
     }
 
     /**
@@ -166,8 +171,7 @@ class VoiceCallManager {
     }
 
     /**
-     * Feed a signaling message received from the opponent via websocket.
-     * @param type {string} CALL_OFFER | CALL_ANSWER | ICE_CANDIDATE | CALL_REJECT | CALL_END
+     * @param type {string} CALL_OFFER | CALL_ANSWER | ICE_CANDIDATE | CALL_REJECT | CALL_END | MIC_MUTED | MIC_UNMUTED
      * @param payload {string|null} JSON string or null
      */
     async handleSignal(type, payload) {
@@ -215,6 +219,12 @@ class VoiceCallManager {
                     this.#onCallEnded();
                 }
                 break;
+            case 'MIC_MUTED':
+                this.#onRemoteMicChange(true);
+                break;
+            case 'MIC_UNMUTED':
+                this.#onRemoteMicChange(false);
+                break;
             default:
                 console.warn('unknown voice call signal type: ' + type);
         }
@@ -231,7 +241,8 @@ class VoiceCallManager {
     }
 
     /**
-     * @return {boolean} true if microphone is currently muted
+     * Toggles the local microphone and notifies the opponent.
+     * @return {boolean} true if microphone is now muted
      */
     toggleMute() {
         if (this.#localStream == null) {
@@ -242,6 +253,7 @@ class VoiceCallManager {
             track.enabled = !track.enabled;
             muted = !track.enabled;
         });
+        this.#sendSignal(muted ? 'MIC_MUTED' : 'MIC_UNMUTED', null);
         return muted;
     }
 
@@ -306,6 +318,7 @@ class VoiceCallManager {
             audio.remove();
         }
         this.#pendingOffer = null;
+        this.#onRemoteMicChange(false);
         this.#setState(VoiceCallState.IDLE);
     }
 
