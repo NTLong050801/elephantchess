@@ -17,6 +17,7 @@ data class PlayerVsPlayerUpdate(
     val timeRemaining: TimeRemaining? = null,
     val chatMessages: List<ChatMessage> = emptyList(),
     val typingUsers: List<TypingUser> = emptyList(),
+    val callSignal: CallSignal? = null,
 )
 
 data class TypingUser(

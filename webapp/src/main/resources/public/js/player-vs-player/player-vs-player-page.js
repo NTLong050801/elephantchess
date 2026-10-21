@@ -69,6 +69,14 @@ class PlayGamePage extends BasePage {
      */
     #chatBoxWidget;
 
+    /**
+     * @type {VoiceCallManager|null}
+     */
+    #voiceCallManager = null;
+
+    #voiceCallButton = document.getElementById('voice-call-button');
+    #voiceCallStatus = document.getElementById('voice-call-status');
+
     #analyzeButtons = [
         document.getElementById('analyze-button-left-side'),
         document.getElementById('analyze-button-right-side')
@@ -223,6 +231,9 @@ class PlayGamePage extends BasePage {
                 },
                 (typingUsers) => {
                     this.#chatBoxWidget.notifyTypingUsers(typingUsers);
+                },
+                (callSignal) => {
+                    this.#handleCallSignal(callSignal);
                 }
             );
 
@@ -316,6 +327,22 @@ class PlayGamePage extends BasePage {
                 this.#gameController.sendTypingEvent();
             }
         });
+
+        // voice call
+        this.#voiceCallManager = new VoiceCallManager(
+            (type, payload) => this.#gameController.sendCallSignal(type, payload)
+        );
+        this.#voiceCallManager.onStateChange((state) => this.#renderVoiceCallState(state));
+        this.#voiceCallManager.onIncomingCall(() => this.#handleIncomingVoiceCall());
+        this.#voiceCallManager.onCallEnded(() => UI.pushInfoNotification('Cuộc gọi thoại đã kết thúc.'));
+        this.#voiceCallManager.onError((msg) => UI.pushErrorNotification(msg, 4_000));
+        if (this.#voiceCallButton != null) {
+            this.#voiceCallButton.addEventListener('click', (e) => {
+                if (isInfoBoxButtonEnabled(e)) {
+                    this.#handleVoiceCallButtonClick();
+                }
+            });
+        }
     }
 
     #updateGui() {
@@ -323,6 +350,15 @@ class PlayGamePage extends BasePage {
         this.#updateGameStatusInfo();
         this.#updateButtonsEnabled();
         this.#chatBoxWidget.enable(this.#gameController.isAllowedToSendChat(userIdOrNull()));
+        if (this.#gameController.isGameFinished() && this.#voiceCallManager != null) {
+            // auto-hangup when the game ends (dispose locally without signaling back
+            // to avoid a CALL_END echo loop; the opponent does the same on their side)
+            this.#voiceCallManager.dispose();
+            this.#renderVoiceCallState(VoiceCallState.IDLE);
+        } else if (this.#voiceCallManager != null
+            && this.#voiceCallManager.state === VoiceCallState.IDLE) {
+            this.#renderVoiceCallState(VoiceCallState.IDLE);
+        }
     }
 
     #initBoard() {
@@ -715,6 +751,9 @@ class PlayGamePage extends BasePage {
             setInfoBoxButtonEnabled(this.#proposeDrawButton, isInProgress);
             setInfoBoxButtonEnabled(this.#proposeTakebackButton, this.#gameController.gameDto.canProposeTakeback());
             setInfoBoxButtonEnabled(this.#cancelButton, status === GameEventType.CREATED);
+            if (this.#voiceCallManager != null && this.#voiceCallManager.state === VoiceCallState.IDLE) {
+                this.#renderVoiceCallState(VoiceCallState.IDLE);
+            }
             this.#showGameActionButtonsBlock(true);
         } else {
             this.#showGameActionButtonsBlock(false);
@@ -973,6 +1012,112 @@ class PlayGamePage extends BasePage {
     #handleTakebackCleared() {
         // auto-cleared because opponent played a move
         this.#updateGui();
+    }
+
+    // ---- voice call ----
+
+    /**
+     * @param callSignal {{type: string, payload: string|null, fromUserId: string|null}}
+     */
+    #handleCallSignal(callSignal) {
+        if (this.#voiceCallManager != null) {
+            this.#voiceCallManager.handleSignal(callSignal.type, callSignal.payload);
+        }
+    }
+
+    #handleVoiceCallButtonClick() {
+        const manager = this.#voiceCallManager;
+        if (manager == null) {
+            return;
+        }
+        switch (manager.state) {
+            case VoiceCallState.IDLE:
+                manager.startCall();
+                break;
+            case VoiceCallState.RINGING: {
+                const offer = manager.takePendingOffer();
+                if (offer != null) {
+                    manager.acceptCall(offer);
+                }
+                break;
+            }
+            case VoiceCallState.CALLING:
+            case VoiceCallState.IN_CALL:
+                manager.hangUp();
+                break;
+        }
+    }
+
+    #handleIncomingVoiceCall() {
+        const text = buildSimpleSpan('Đối thủ muốn gọi thoại với bạn. Bạn có nghe máy không?');
+        const yesCallback = () => {
+            const offer = this.#voiceCallManager.takePendingOffer();
+            if (offer != null) {
+                this.#voiceCallManager.acceptCall(offer);
+            }
+        };
+        const yesButtonText = 'nghe máy';
+        const noCallback = () => {
+            UI.hideModal(null);
+            this.#voiceCallManager.rejectCall();
+        };
+        const noButtonText = 'từ chối';
+        UI.showConfirmationModal(text, yesCallback, yesButtonText, noCallback, noButtonText);
+    }
+
+    /**
+     * @param state {string}
+     */
+    #renderVoiceCallState(state) {
+        if (this.#voiceCallButton == null) {
+            return;
+        }
+        const labelCell = this.#voiceCallButton.querySelector('.description-cell');
+        const statusEl = this.#voiceCallStatus;
+        const isPlayer = this.#gameController != null
+            && this.#gameController.gameDto != null
+            && this.#gameController.gameDto.isUserPlaying();
+        const canCall = isPlayer
+            && this.#gameController.isGameInProgress()
+            && this.#gameController.gameDto.hasBeenJoined();
+        switch (state) {
+            case VoiceCallState.IDLE:
+                if (labelCell != null) {
+                    labelCell.textContent = 'Gọi thoại';
+                }
+                if (statusEl != null) {
+                    statusEl.textContent = '';
+                }
+                setInfoBoxButtonEnabled(this.#voiceCallButton, canCall);
+                break;
+            case VoiceCallState.CALLING:
+                if (labelCell != null) {
+                    labelCell.textContent = 'Hủy cuộc gọi';
+                }
+                if (statusEl != null) {
+                    statusEl.textContent = 'Đang gọi...';
+                }
+                setInfoBoxButtonEnabled(this.#voiceCallButton, true);
+                break;
+            case VoiceCallState.RINGING:
+                if (labelCell != null) {
+                    labelCell.textContent = 'Nghe máy / Từ chối';
+                }
+                if (statusEl != null) {
+                    statusEl.textContent = 'Có cuộc gọi đến...';
+                }
+                setInfoBoxButtonEnabled(this.#voiceCallButton, true);
+                break;
+            case VoiceCallState.IN_CALL:
+                if (labelCell != null) {
+                    labelCell.textContent = 'Kết thúc gọi';
+                }
+                if (statusEl != null) {
+                    statusEl.textContent = 'Đang trong cuộc gọi';
+                }
+                setInfoBoxButtonEnabled(this.#voiceCallButton, true);
+                break;
+        }
     }
 
     /**

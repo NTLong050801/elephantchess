@@ -9,6 +9,8 @@ import io.elephantchess.db.dao.codegen.Tables.USER
 import io.elephantchess.db.utils.awaitExecute
 import io.elephantchess.model.UserType.AUTHENTICATED
 import io.elephantchess.servicelayer.dto.game.PlayMoveRequest
+import io.elephantchess.servicelayer.dto.ws.CallSignal
+import io.elephantchess.servicelayer.dto.ws.CallSignalType
 import io.elephantchess.servicelayer.dto.ws.PlayerVsPlayerInput
 import io.elephantchess.servicelayer.dto.ws.PlayerVsPlayerUpdate
 import io.elephantchess.servicelayer.model.UserId
@@ -187,6 +189,68 @@ class PlayerVsPlayerGameServiceRefreshIntegrationTest : ServiceTest() {
 
     private suspend fun playMove(gameId: String, userId: UserId, move: String) {
         pvpGameService.playMove(userId.id, PlayMoveRequest(gameId, move))
+    }
+
+    @Test
+    fun `call signal forwards immediately to opponent session only`() {
+        runBlocking {
+            val gameId = createAndJoinGame(userId1, userId2)
+            val session1 = startSession(gameId, userId1)
+            val session2 = startSession(gameId, userId2)
+
+            try {
+                pvpGameService.refreshPlayerVsPlayerSessions()
+                session1.channel.drain()
+                session2.channel.drain()
+
+                // user1 sends a call offer: user2 must receive it right away (no refresh needed)
+                pvpGameService.handlePlayerVsPlayerInput(
+                    userId = userId1,
+                    gameId = gameId,
+                    input = PlayerVsPlayerInput(
+                        callSignal = CallSignal(type = CallSignalType.CALL_OFFER, payload = """{"sdp":"fake-offer"}""")
+                    )
+                )
+
+                val offerUpdate = session2.channel.awaitNextUpdate()
+                assertNotNull(offerUpdate.callSignal)
+                assertEquals(CallSignalType.CALL_OFFER, offerUpdate.callSignal!!.type)
+                assertEquals("""{"sdp":"fake-offer"}""", offerUpdate.callSignal!!.payload)
+                assertEquals(userId1.id, offerUpdate.callSignal!!.fromUserId)
+
+                // sender must NOT receive their own signal back
+                assertTrue(session1.channel.tryReceive().isFailure, "sender should not receive their own call signal")
+
+                // user2 answers: user1 receives it
+                session2.channel.drain()
+                pvpGameService.handlePlayerVsPlayerInput(
+                    userId = userId2,
+                    gameId = gameId,
+                    input = PlayerVsPlayerInput(
+                        callSignal = CallSignal(type = CallSignalType.CALL_ANSWER, payload = """{"sdp":"fake-answer"}""")
+                    )
+                )
+
+                val answerUpdate = session1.channel.awaitNextUpdate()
+                assertEquals(CallSignalType.CALL_ANSWER, answerUpdate.callSignal!!.type)
+                assertEquals(userId2.id, answerUpdate.callSignal!!.fromUserId)
+
+                // spectator (non-player) signal is ignored: nobody receives anything
+                session1.channel.drain()
+                session2.channel.drain()
+                pvpGameService.handlePlayerVsPlayerInput(
+                    userId = userId3,
+                    gameId = gameId,
+                    input = PlayerVsPlayerInput(
+                        callSignal = CallSignal(type = CallSignalType.CALL_OFFER, payload = "intruder")
+                    )
+                )
+                assertTrue(session1.channel.tryReceive().isFailure, "spectator signal must be ignored")
+                assertTrue(session2.channel.tryReceive().isFailure, "spectator signal must be ignored")
+            } finally {
+                listOf(session1, session2).forEach { pvpGameService.closePlayerVsPlayerSession(it.sessionId) }
+            }
+        }
     }
 
     private suspend fun startSession(gameId: String, userId: UserId): SessionHandle {

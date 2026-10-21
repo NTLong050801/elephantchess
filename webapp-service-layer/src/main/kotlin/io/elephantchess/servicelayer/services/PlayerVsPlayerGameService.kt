@@ -5,6 +5,7 @@ import io.elephantchess.db.callback.PlayMoveCallbackResult
 import io.elephantchess.db.callback.UpdateRatingsCallbackResult
 import io.elephantchess.db.dao.codegen.tables.pojos.Game
 import io.elephantchess.db.dao.codegen.tables.pojos.GameChatMessage
+import io.elephantchess.db.model.GamePlayersStatus
 import io.elephantchess.db.model.HasJoinedRecord
 import io.elephantchess.db.model.TimeControlRecord
 import io.elephantchess.db.services.ChatMessageDaoService
@@ -648,10 +649,38 @@ class PlayerVsPlayerGameService(
                 )
             } else if (input.isTyping) {
                 gameChatTypingStatusDaoService.upsertTypingStatus(gameId, userId.id)
+            } else if (input.callSignal != null) {
+                forwardCallSignal(userId, gameId, gamePlayersStatus, input.callSignal)
             }
         } else {
             logger.warn { "user $userId is not allowed to send message in game $gameId" }
         }
+    }
+
+    /**
+     * Forwards a voice-call signaling message to the other player(s) of the game immediately
+     * (no DB persistence, no waiting for the refresh loop).
+     */
+    private fun forwardCallSignal(
+        sender: UserId,
+        gameId: String,
+        gamePlayersStatus: GamePlayersStatus,
+        signal: CallSignal,
+    ) {
+        if (!gamePlayersStatus.isPlaying(sender.id)) {
+            logger.warn { "user $sender is not a player of game $gameId, ignoring call signal" }
+            return
+        }
+        val taggedSignal = signal.copy(fromUserId = sender.id)
+        playerVsPlayerSessions
+            .filter { session ->
+                session.gameId == gameId &&
+                        !session.isClosed &&
+                        session.userId.id != sender.id
+            }
+            .forEach { session ->
+                session.pushCallSignal(PlayerVsPlayerUpdate(callSignal = taggedSignal))
+            }
     }
 
     fun closePlayerVsPlayerSession(sessionId: String) {

@@ -65,6 +65,7 @@ class GameController {
     #fetchMovesCallback = (moves) => console.log('fetch moves ' + moves);
     #receivedChatMessages = (chatMessages, acks) => console.log('received chat messages ' + chatMessages);
     #opponentTypingCallback = (typingUsers) => console.log('opponents are typing: ' + JSON.stringify(typingUsers));
+    #callSignalReceivedCallback = (callSignal) => console.log('received call signal: ' + JSON.stringify(callSignal));
 
     /**
      * @param gameId {string}
@@ -87,6 +88,7 @@ class GameController {
      * @param fetchMovesCallback {function(HalfMove[])}
      * @param receivedChatMessages {function(ChatMessageDto[], number[])}
      * @param opponentTypingCallback {function(Array<Object.<string,string, *>>)} Map of userId→username for users currently typing
+     * @param callSignalReceivedCallback {function(Object)} voice-call signaling {type, payload, fromUserId}
      */
     constructor(
         gameId,
@@ -109,6 +111,8 @@ class GameController {
         fetchMovesCallback,
         receivedChatMessages,
         opponentTypingCallback = (typingUsers) => {
+        },
+        callSignalReceivedCallback = (callSignal) => {
         }
     ) {
         this.#gameId = gameId;
@@ -130,6 +134,7 @@ class GameController {
         this.#fetchMovesCallback = fetchMovesCallback;
         this.#receivedChatMessages = receivedChatMessages;
         this.#opponentTypingCallback = opponentTypingCallback;
+        this.#callSignalReceivedCallback = callSignalReceivedCallback;
         this.#client = new GameClient(gameId);
 
         this.#client.getData(gameDto => {
@@ -311,6 +316,9 @@ class GameController {
                     this.#handleReceivedChatMessages(chatMessages);
                     if (Array.isArray(json.typingUsers) && json.typingUsers.length > 0) {
                         this.#opponentTypingCallback(json.typingUsers);
+                    }
+                    if (json.callSignal != null) {
+                        this.#callSignalReceivedCallback(json.callSignal);
                     }
                 }
             });
@@ -519,6 +527,17 @@ class GameController {
     sendTypingEvent() {
         if (this.#webSocket != null) {
             this.#webSocket.send(JSON.stringify({"isTyping": true}));
+        }
+    }
+
+    /**
+     * Sends a voice-call signaling message to the opponent via the game websocket.
+     * @param type {string} CALL_OFFER | CALL_ANSWER | ICE_CANDIDATE | CALL_REJECT | CALL_END
+     * @param payload {string|null} JSON string or null
+     */
+    sendCallSignal(type, payload) {
+        if (this.#webSocket != null) {
+            this.#webSocket.send(JSON.stringify({"callSignal": {"type": type, "payload": payload}}));
         }
     }
 

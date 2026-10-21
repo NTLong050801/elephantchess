@@ -28,6 +28,19 @@ class PlayerVsPlayerWebSocketSession(
     fun currentStatus(): GameEventType = status
     fun currentTakebackPropositionUser(): String? = takebackPropositionUser
 
+    /**
+     * Pushes a voice-call signaling message immediately, bypassing the periodic refresh
+     * loop (which would add up to ~500ms latency — unacceptable for call setup).
+     */
+    fun pushCallSignal(update: PlayerVsPlayerUpdate) {
+        val result = sendCb(update)
+        if (result.isClosed) {
+            markAsClosed()
+        } else if (result.isFailure) {
+            logger.error { "failed to send call signal to player vs player session $sessionId" }
+        }
+    }
+
     fun isWaitingToBeJoined() =
         status == GameEventType.CREATED
 
@@ -36,8 +49,7 @@ class PlayerVsPlayerWebSocketSession(
                 now > (timeRemainingLastSync!! + TIME_REMAINING_SYNC_INTERVAL)
     }
 
-    override fun update(update: PlayerVsPlayerUpdate) {
-        var mustUpdate = false
+    override fun update(update: PlayerVsPlayerUpdate) {        var mustUpdate = false
 
         // status changed
         if (update.status != null && update.status != status) {

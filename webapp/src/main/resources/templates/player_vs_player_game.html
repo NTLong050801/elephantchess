@@ -12,6 +12,7 @@
     <script defer src="/js/modal-handlers/join-game-modal-handler.js"></script>
     <script defer src="/js/player-vs-player/player-vs-player-dto.js"></script>
     <script defer src="/js/player-vs-player/player-vs-player-client.js"></script>
+    <script defer src="/js/player-vs-player/voice-call-manager.js"></script>
     <script defer src="/js/player-vs-player/player-vs-player-controller.js"></script>
     <script defer src="/js/player-vs-player/player-vs-player-page.js"></script>
 </head>
@@ -144,6 +145,19 @@
                     </td>
                     <td class="description-cell">
                         Hủy
+                    </td>
+                </tr>
+                <tr id="voice-call-button" class="disabled-button">
+                    <td class="icon-cell">
+                        <img src="/images/icons/chat.png" alt="gọi thoại"/>
+                    </td>
+                    <td class="description-cell">
+                        Gọi thoại
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="values">
+                        <div id="voice-call-status"></div>
                     </td>
                 </tr>
                 </tbody>
