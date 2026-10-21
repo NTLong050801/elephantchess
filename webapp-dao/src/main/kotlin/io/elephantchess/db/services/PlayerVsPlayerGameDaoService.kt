@@ -647,12 +647,18 @@ class PlayerVsPlayerGameDaoService(private val dslContext: DSLContext) {
             val currentIndex = gameRecord.currentHalfMoveIndex
             if (currentIndex <= 0) throw IllegalStateException("No moves to take back")
 
-            val lastPosition = currentIndex - 1
-            // delete last move
+            // Takeback is requested by the player to move, who wants to redo
+            // their previous move as well as the opponent's last move. Undoing
+            // a single ply would hand the turn to the opponent, so undo a full
+            // round (2 plies) to give the turn back to the proposer.
+            // Edge case index == 1: only one move exists, undo just it.
+            val movesToTakeBack = if (currentIndex >= 2) 2 else 1
+            val newIndex = currentIndex - movesToTakeBack
+            // delete last move(s)
             transactional
                 .deleteFrom(GAME_MOVE)
                 .where(GAME_MOVE.GAME_ID.eq(gameId))
-                .and(GAME_MOVE.POSITION.eq(lastPosition))
+                .and(GAME_MOVE.POSITION.ge(newIndex))
                 .awaitExecute()
 
             // recompute FEN from remaining moves
@@ -668,7 +674,6 @@ class PlayerVsPlayerGameDaoService(private val dslContext: DSLContext) {
             val board = io.elephantchess.xiangqi.Board(startFen)
             remainingMoves.forEach { uci -> board.registerMove(uci) }
             val newFen = board.outputFen()
-            val newIndex = remainingMoves.size
             val now = Clock.System.now()
 
             transactional

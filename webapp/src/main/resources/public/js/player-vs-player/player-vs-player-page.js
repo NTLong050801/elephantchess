@@ -977,7 +977,7 @@ class PlayGamePage extends BasePage {
     }
 
     #handleProposeTakebackButtonClick() {
-        const text = buildSimpleSpan('Bạn có chắc muốn xin đi lại nước trước của đối thủ không?');
+        const text = buildSimpleSpan('Bạn có chắc muốn xin đi lại (hoàn 2 nước: nước vừa rồi của đối thủ và nước trước đó của bạn) không?');
         const yesCallback = () => this.#gameController.proposeTakeback();
         const yesButtonText = 'xin đi lại';
         const noCallback = () => UI.hideModal(null);
@@ -1077,9 +1077,10 @@ class PlayGamePage extends BasePage {
         const isPlayer = this.#gameController != null
             && this.#gameController.gameDto != null
             && this.#gameController.gameDto.isUserPlaying();
-        const canCall = isPlayer
-            && this.#gameController.isGameInProgress()
-            && this.#gameController.gameDto.hasBeenJoined();
+        // Allow calling whenever the game is not finished. (A stricter check like
+        // isGameInProgress() && hasBeenJoined() wrongly disables the button after a
+        // call ends, because the game status is not always JOINED at render time.)
+        const canCall = isPlayer && !this.#gameController.isGameFinished();
         switch (state) {
             case VoiceCallState.IDLE:
                 if (labelCell != null) {
